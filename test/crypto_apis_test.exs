@@ -2,39 +2,13 @@ defmodule CryptoApisTest do
   use ExUnit.Case
   doctest CryptoApis
   import Mock
+  import CryptoApis.Fixtures
 
   @data %{key: :value}
   @encoded Jason.encode!(@data)
   @decoded Jason.decode!(@encoded)
   @url "http://localhost:4000"
   @json_headers [{"Content-Type", "application/json"}]
-
-  def successful_response(opts \\ []) do
-    status_code = Keyword.get(opts, :status_code, 200)
-    body = Keyword.get(opts, :body)
-    headers = Keyword.get(opts, :headers, [])
-    options = Keyword.get(opts, :options, [])
-    url = Keyword.get(opts, :url, "localhost:4000")
-
-    request = %HTTPoison.Request{
-      headers: headers,
-      options: options,
-      url: url
-    }
-
-    %HTTPoison.Response{
-      status_code: status_code,
-      body: body,
-      headers: headers,
-      request_url: url,
-      request: request
-    }
-  end
-
-  def error_response(opts \\ []) do
-    status_code = Keyword.get(opts, :status_code, 404)
-    %HTTPoison.Response{status_code: status_code}
-  end
 
   describe "fetch/2" do
     test "collects params from top-level" do
