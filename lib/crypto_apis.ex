@@ -77,7 +77,7 @@ defmodule CryptoApis do
 
   defp json_header?(_value), do: false
 
-  def fetch(url, opts \\ []) when is_binary(url) do
+  def get(url, opts \\ []) when is_binary(url) do
     {options, headers} = get_opts(opts)
 
     url
@@ -85,7 +85,7 @@ defmodule CryptoApis do
     |> handle_response()
   end
 
-  def fetch!(url, opts \\ []) when is_binary(url) do
+  def get!(url, opts \\ []) when is_binary(url) do
     {options, headers} = get_opts(opts)
 
     url

@@ -13,16 +13,16 @@ defmodule CryptoApis.Kraken do
 
   alias CryptoApis
 
-  defp fetch(type, opts) do
+  defp get(type, opts) do
     type
     |> url()
-    |> CryptoApis.fetch(opts)
+    |> CryptoApis.get(opts)
   end
 
-  defp fetch!(type, opts) do
+  defp get!(type, opts) do
     type
     |> url()
-    |> CryptoApis.fetch!(opts)
+    |> CryptoApis.get!(opts)
   end
 
   def url(:server_time) do
@@ -69,56 +69,56 @@ defmodule CryptoApis.Kraken do
   https://www.kraken.com/features/api#get-server-time
   """
   def server_time(opts \\ []) do
-    fetch(:server_time, opts)
+    get(:server_time, opts)
   end
 
   @doc """
   https://www.kraken.com/features/api#get-server-time
   """
   def server_time!(opts \\ []) do
-    fetch!(:server_time, opts)
+    get!(:server_time, opts)
   end
 
   @doc """
   https://www.kraken.com/features/api#get-system-status
   """
   def system_status(opts \\ []) do
-    fetch(:system_status, opts)
+    get(:system_status, opts)
   end
 
   @doc """
   https://www.kraken.com/features/api#get-system-status
   """
   def system_status!(opts \\ []) do
-    fetch!(:system_status, opts)
+    get!(:system_status, opts)
   end
 
   @doc """
   https://www.kraken.com/features/api#get-asset-info
   """
   def assets(opts \\ []) do
-    fetch(:assets, opts)
+    get(:assets, opts)
   end
 
   @doc """
   https://www.kraken.com/features/api#get-asset-info
   """
   def assets!(opts \\ []) do
-    fetch!(:assets, opts)
+    get!(:assets, opts)
   end
 
   @doc """
   https://www.kraken.com/features/api#get-tradable-pairs
   """
   def asset_pairs(opts \\ []) do
-    fetch(:asset_pairs, opts)
+    get(:asset_pairs, opts)
   end
 
   @doc """
   https://www.kraken.com/features/api#get-tradable-pairs
   """
   def asset_pairs!(opts \\ []) do
-    fetch!(:asset_pairs, opts)
+    get!(:asset_pairs, opts)
   end
 
   @doc """
@@ -127,7 +127,7 @@ defmodule CryptoApis.Kraken do
   def ticker(pair_name, opts \\ []) when is_atom(pair_name) or is_binary(pair_name) do
     opts = CryptoApis.override_params(opts, :pair_name, pair_name)
 
-    fetch(:ticker, opts)
+    get(:ticker, opts)
   end
 
   @doc """
@@ -136,7 +136,7 @@ defmodule CryptoApis.Kraken do
   def ticker!(pair_name, opts \\ []) when is_atom(pair_name) or is_binary(pair_name) do
     opts = CryptoApis.override_params(opts, :pair_name, pair_name)
 
-    fetch!(:ticker, opts)
+    get!(:ticker, opts)
   end
 
   @doc """
@@ -145,7 +145,7 @@ defmodule CryptoApis.Kraken do
   def ohlc(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
     opts = CryptoApis.override_params(opts, :pair, pair)
 
-    fetch(:ohlc, opts)
+    get(:ohlc, opts)
   end
 
   @doc """
@@ -154,7 +154,7 @@ defmodule CryptoApis.Kraken do
   def ohlc!(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
     opts = CryptoApis.override_params(opts, :pair, pair)
 
-    fetch!(:ohlc, opts)
+    get!(:ohlc, opts)
   end
 
   @doc """
@@ -163,7 +163,7 @@ defmodule CryptoApis.Kraken do
   def order_book(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
     opts = CryptoApis.override_params(opts, :pair, pair)
 
-    fetch(:order_book, opts)
+    get(:order_book, opts)
   end
 
   @doc """
@@ -172,7 +172,7 @@ defmodule CryptoApis.Kraken do
   def order_book!(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
     opts = CryptoApis.override_params(opts, :pair, pair)
 
-    fetch!(:order_book, opts)
+    get!(:order_book, opts)
   end
 
   @doc """
@@ -181,7 +181,7 @@ defmodule CryptoApis.Kraken do
   def trades(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
     opts = CryptoApis.override_params(opts, :pair, pair)
 
-    fetch(:trades, opts)
+    get(:trades, opts)
   end
 
   @doc """
@@ -190,7 +190,7 @@ defmodule CryptoApis.Kraken do
   def trades!(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
     opts = CryptoApis.override_params(opts, :pair, pair)
 
-    fetch!(:trades, opts)
+    get!(:trades, opts)
   end
 
   @doc """
@@ -199,7 +199,7 @@ defmodule CryptoApis.Kraken do
   def spread(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
     opts = CryptoApis.override_params(opts, :pair, pair)
 
-    fetch(:spread, opts)
+    get(:spread, opts)
   end
 
   @doc """
@@ -208,6 +208,6 @@ defmodule CryptoApis.Kraken do
   def spread!(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
     opts = CryptoApis.override_params(opts, :pair, pair)
 
-    fetch!(:spread, opts)
+    get!(:spread, opts)
   end
 end
