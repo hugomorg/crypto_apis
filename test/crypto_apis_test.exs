@@ -10,6 +10,13 @@ defmodule CryptoApisTest do
   @url "http://localhost:4000"
   @json_headers [{"Content-Type", "application/json"}]
 
+  describe "override_params/3" do
+    test "overrides params key with value" do
+      original = [params: [key: :value]]
+      assert CryptoApis.override_params(original, :key, :new_value) == [params: [key: :new_value]]
+    end
+  end
+
   describe "fetch/2" do
     test "collects params from top-level" do
       with_mock HTTPoison,

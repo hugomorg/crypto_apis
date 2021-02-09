@@ -3,6 +3,15 @@ defmodule CryptoApis do
   Documentation for `CryptoApis`.
   """
 
+  def override_params(opts, key, value) do
+    params =
+      opts
+      |> Keyword.get(:params, [])
+      |> Keyword.put(key, value)
+
+    Keyword.put(opts, :params, params)
+  end
+
   defp get_params(opts) do
     opts
     |> Keyword.get(:params)
