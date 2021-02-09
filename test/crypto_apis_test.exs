@@ -9,11 +9,16 @@ defmodule CryptoApisTest do
   @url "http://localhost:4000"
   @json_headers [{"Content-Type", "application/json"}]
 
-  def successful_response(headers \\ [], body \\ @encoded) do
-    %HTTPoison.Response{status_code: 200, body: body, headers: headers}
+  def successful_response(opts \\ []) do
+    status_code = Keyword.get(opts, :status_code, 200)
+    body = Keyword.get(opts, :body)
+    headers = Keyword.get(opts, :headers, [])
+    url = Keyword.get(opts, :url)
+    %HTTPoison.Response{status_code: status_code, body: body, headers: headers, request_url: url}
   end
 
-  def error_response(status_code \\ 404) do
+  def error_response(opts \\ []) do
+    status_code = Keyword.get(opts, :status_code, 404)
     %HTTPoison.Response{status_code: status_code}
   end
 
@@ -21,7 +26,7 @@ defmodule CryptoApisTest do
     test "fetch returns successful non-json responses" do
       with_mock HTTPoison,
         get: fn _url, _headers, _options ->
-          {:ok, successful_response()}
+          {:ok, successful_response(body: @encoded)}
         end do
         assert CryptoApis.fetch(@url) ==
                  {:ok, %HTTPoison.Response{body: @encoded, status_code: 200}}
@@ -31,7 +36,7 @@ defmodule CryptoApisTest do
     test "fetch returns successful json responses" do
       with_mock HTTPoison,
         get: fn _url, _headers, _options ->
-          {:ok, successful_response(@json_headers)}
+          {:ok, successful_response(headers: @json_headers, body: @encoded)}
         end do
         assert CryptoApis.fetch(@url) ==
                  {:ok,
@@ -59,7 +64,7 @@ defmodule CryptoApisTest do
     test "fetch returns error responses for json error" do
       with_mock HTTPoison,
         get: fn _url, _headers, _options ->
-          {:ok, successful_response(@json_headers, "bad json")}
+          {:ok, successful_response(headers: @json_headers, body: "bad json")}
         end do
         assert {:error, %Jason.DecodeError{}} = CryptoApis.fetch(@url)
       end
@@ -70,7 +75,7 @@ defmodule CryptoApisTest do
     test "fetch! returns successful non-json responses" do
       with_mock HTTPoison,
         get!: fn _url, _headers, _options ->
-          successful_response()
+          successful_response(body: @encoded)
         end do
         assert CryptoApis.fetch!(@url) ==
                  %HTTPoison.Response{body: @encoded, status_code: 200}
@@ -80,7 +85,7 @@ defmodule CryptoApisTest do
     test "fetch! returns successful json responses" do
       with_mock HTTPoison,
         get!: fn _url, _headers, _options ->
-          successful_response(@json_headers)
+          successful_response(headers: @json_headers, body: @encoded)
         end do
         assert CryptoApis.fetch!(@url) ==
                  %HTTPoison.Response{
@@ -94,7 +99,7 @@ defmodule CryptoApisTest do
     test "fetch! does not raise for error codes" do
       with_mock HTTPoison,
         get!: fn _url, _headers, _options ->
-          error_response(500)
+          error_response(status_code: 500)
         end do
         assert %HTTPoison.Response{
           status_code: 500
@@ -105,7 +110,7 @@ defmodule CryptoApisTest do
     test "fetch! returns error responses for json error" do
       with_mock HTTPoison,
         get!: fn _url, _headers, _options ->
-          successful_response(@json_headers, "bad json")
+          successful_response(headers: @json_headers, body: "bad json")
         end do
         assert_raise Jason.DecodeError, fn ->
           CryptoApis.fetch!(@url)
