@@ -46,6 +46,18 @@ defmodule CryptoApis.Kraken do
     build_public_url("OHLC")
   end
 
+  def url(:order_book) do
+    build_public_url("Depth")
+  end
+
+  def url(:trades) do
+    build_public_url("Trades")
+  end
+
+  def url(:spread) do
+    build_public_url("Spread")
+  end
+
   defp build_public_url(resource, root \\ @root_url, api_version \\ @api_version) do
     "#{root}/#{api_version}/public/#{resource}"
   end
@@ -104,5 +116,41 @@ defmodule CryptoApis.Kraken do
     opts = CryptoApis.override_params(opts, :pair, pair)
 
     fetch!(:ohlc, opts)
+  end
+
+  def order_book(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
+    opts = CryptoApis.override_params(opts, :pair, pair)
+
+    fetch(:order_book, opts)
+  end
+
+  def order_book!(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
+    opts = CryptoApis.override_params(opts, :pair, pair)
+
+    fetch!(:order_book, opts)
+  end
+
+  def trades(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
+    opts = CryptoApis.override_params(opts, :pair, pair)
+
+    fetch(:trades, opts)
+  end
+
+  def trades!(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
+    opts = CryptoApis.override_params(opts, :pair, pair)
+
+    fetch!(:trades, opts)
+  end
+
+  def spread(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
+    opts = CryptoApis.override_params(opts, :pair, pair)
+
+    fetch(:spread, opts)
+  end
+
+  def spread!(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
+    opts = CryptoApis.override_params(opts, :pair, pair)
+
+    fetch!(:spread, opts)
   end
 end

@@ -28,6 +28,18 @@ defmodule CryptoApis.KrakenTest do
     test "url for OHLC" do
       assert Kraken.url(:ohlc) == "https://api.kraken.com/0/public/OHLC"
     end
+
+    test "url for order book" do
+      assert Kraken.url(:order_book) == "https://api.kraken.com/0/public/Depth"
+    end
+
+    test "url for trades" do
+      assert Kraken.url(:trades) == "https://api.kraken.com/0/public/Trades"
+    end
+
+    test "url for spread" do
+      assert Kraken.url(:spread) == "https://api.kraken.com/0/public/Spread"
+    end
   end
 
   describe "server time" do
@@ -173,6 +185,84 @@ defmodule CryptoApis.KrakenTest do
         assert %HTTPoison.Response{} = response = Kraken.ohlc!("BTCGBP")
         assert response.status_code == 200
         assert response.request_url == "https://api.kraken.com/0/public/OHLC"
+        assert response.request.options == [params: [pair: "BTCGBP"]]
+      end
+    end
+  end
+
+  describe "order_book" do
+    test "order_book/2 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, options ->
+          {:ok, successful_response(url: url, options: options)}
+        end do
+        assert {:ok, response} = Kraken.order_book(:BTCUSD)
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/Depth"
+        assert response.request.options == [params: [pair: :BTCUSD]]
+      end
+    end
+
+    test "order_book!/2 responds ok" do
+      with_mock HTTPoison,
+        get!: fn url, _headers, options ->
+          successful_response(url: url, options: options)
+        end do
+        assert %HTTPoison.Response{} = response = Kraken.order_book!("BTCGBP")
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/Depth"
+        assert response.request.options == [params: [pair: "BTCGBP"]]
+      end
+    end
+  end
+
+  describe "trades" do
+    test "trades/2 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, options ->
+          {:ok, successful_response(url: url, options: options)}
+        end do
+        assert {:ok, response} = Kraken.trades(:BTCUSD)
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/Trades"
+        assert response.request.options == [params: [pair: :BTCUSD]]
+      end
+    end
+
+    test "trades!/2 responds ok" do
+      with_mock HTTPoison,
+        get!: fn url, _headers, options ->
+          successful_response(url: url, options: options)
+        end do
+        assert %HTTPoison.Response{} = response = Kraken.trades!("BTCGBP")
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/Trades"
+        assert response.request.options == [params: [pair: "BTCGBP"]]
+      end
+    end
+  end
+
+  describe "spread" do
+    test "spread/2 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, options ->
+          {:ok, successful_response(url: url, options: options)}
+        end do
+        assert {:ok, response} = Kraken.spread(:BTCUSD)
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/Spread"
+        assert response.request.options == [params: [pair: :BTCUSD]]
+      end
+    end
+
+    test "spread!/2 responds ok" do
+      with_mock HTTPoison,
+        get!: fn url, _headers, options ->
+          successful_response(url: url, options: options)
+        end do
+        assert %HTTPoison.Response{} = response = Kraken.spread!("BTCGBP")
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/Spread"
         assert response.request.options == [params: [pair: "BTCGBP"]]
       end
     end
