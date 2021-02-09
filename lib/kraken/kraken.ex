@@ -34,6 +34,10 @@ defmodule CryptoApis.Kraken do
     build_public_url("Assets")
   end
 
+  def url(:asset_pairs) do
+    build_public_url("AssetPairs")
+  end
+
   defp build_public_url(resource, root \\ @root_url, api_version \\ @api_version) do
     "#{root}/#{api_version}/public/#{resource}"
   end
@@ -60,5 +64,13 @@ defmodule CryptoApis.Kraken do
 
   def assets!(opts \\ []) do
     fetch!(:assets, opts)
+  end
+
+  def asset_pairs(opts \\ []) do
+    fetch(:asset_pairs, opts)
+  end
+
+  def asset_pairs!(opts \\ []) do
+    fetch!(:asset_pairs, opts)
   end
 end

@@ -89,4 +89,28 @@ defmodule CryptoApis.KrakenTest do
       end
     end
   end
+
+  describe "asset_pairs" do
+    test "asset_pairs/1 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, _options ->
+          {:ok, successful_response(url: url)}
+        end do
+        assert {:ok, response} = Kraken.asset_pairs()
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/AssetPairs"
+      end
+    end
+
+    test "asset_pairs!/1 responds ok" do
+      with_mock HTTPoison,
+        get!: fn url, _headers, _options ->
+          successful_response(url: url)
+        end do
+        assert %HTTPoison.Response{} = response = Kraken.asset_pairs!()
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/AssetPairs"
+      end
+    end
+  end
 end
