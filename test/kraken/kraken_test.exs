@@ -139,4 +139,30 @@ defmodule CryptoApis.KrakenTest do
       end
     end
   end
+
+  describe "ohlc" do
+    test "ohlc/2 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, options ->
+          {:ok, successful_response(url: url, options: options)}
+        end do
+        assert {:ok, response} = Kraken.ohlc(:BTCUSD)
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/OHLC"
+        assert response.request.options == [params: [pair: :BTCUSD]]
+      end
+    end
+
+    test "ohlc!/2 responds ok" do
+      with_mock HTTPoison,
+        get!: fn url, _headers, options ->
+          successful_response(url: url, options: options)
+        end do
+        assert %HTTPoison.Response{} = response = Kraken.ohlc!("BTCGBP")
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/OHLC"
+        assert response.request.options == [params: [pair: "BTCGBP"]]
+      end
+    end
+  end
 end

@@ -42,6 +42,10 @@ defmodule CryptoApis.Kraken do
     build_public_url("Ticker")
   end
 
+  def url(:ohlc) do
+    build_public_url("OHLC")
+  end
+
   defp build_public_url(resource, root \\ @root_url, api_version \\ @api_version) do
     "#{root}/#{api_version}/public/#{resource}"
   end
@@ -88,5 +92,17 @@ defmodule CryptoApis.Kraken do
     opts = CryptoApis.override_params(opts, :pair_name, pair_name)
 
     fetch!(:ticker, opts)
+  end
+
+  def ohlc(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
+    opts = CryptoApis.override_params(opts, :pair, pair)
+
+    fetch(:ohlc, opts)
+  end
+
+  def ohlc!(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
+    opts = CryptoApis.override_params(opts, :pair, pair)
+
+    fetch!(:ohlc, opts)
   end
 end
