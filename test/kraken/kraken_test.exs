@@ -16,6 +16,18 @@ defmodule CryptoApis.KrakenTest do
     test "url for assets" do
       assert Kraken.url(:assets) == "https://api.kraken.com/0/public/Assets"
     end
+
+    test "url for asset_pairs" do
+      assert Kraken.url(:asset_pairs) == "https://api.kraken.com/0/public/AssetPairs"
+    end
+
+    test "url for ticker" do
+      assert Kraken.url(:ticker) == "https://api.kraken.com/0/public/Ticker"
+    end
+
+    test "url for OHLC" do
+      assert Kraken.url(:ohlc) == "https://api.kraken.com/0/public/OHLC"
+    end
   end
 
   describe "server time" do
