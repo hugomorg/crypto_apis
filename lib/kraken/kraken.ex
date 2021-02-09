@@ -3,6 +3,9 @@ defmodule CryptoApis.Kraken do
   An API wrapper for the Kraken exchange.
 
   Docs: https://www.kraken.com/features/api
+
+  Currently only supports public endpoints.
+
   """
 
   @root_url "https://api.kraken.com"
