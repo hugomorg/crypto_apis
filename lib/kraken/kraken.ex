@@ -38,6 +38,10 @@ defmodule CryptoApis.Kraken do
     build_public_url("AssetPairs")
   end
 
+  def url(:ticker) do
+    build_public_url("Ticker")
+  end
+
   defp build_public_url(resource, root \\ @root_url, api_version \\ @api_version) do
     "#{root}/#{api_version}/public/#{resource}"
   end
@@ -72,5 +76,17 @@ defmodule CryptoApis.Kraken do
 
   def asset_pairs!(opts \\ []) do
     fetch!(:asset_pairs, opts)
+  end
+
+  def ticker(pair_name, opts \\ []) when is_atom(pair_name) or is_binary(pair_name) do
+    opts = CryptoApis.override_params(opts, :pair_name, pair_name)
+
+    fetch(:ticker, opts)
+  end
+
+  def ticker!(pair_name, opts \\ []) when is_atom(pair_name) or is_binary(pair_name) do
+    opts = CryptoApis.override_params(opts, :pair_name, pair_name)
+
+    fetch!(:ticker, opts)
   end
 end

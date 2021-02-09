@@ -113,4 +113,30 @@ defmodule CryptoApis.KrakenTest do
       end
     end
   end
+
+  describe "ticker" do
+    test "ticker/2 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, options ->
+          {:ok, successful_response(url: url, options: options)}
+        end do
+        assert {:ok, response} = Kraken.ticker(:BTCUSD)
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/Ticker"
+        assert response.request.options == [params: [pair_name: :BTCUSD]]
+      end
+    end
+
+    test "ticker!/2 responds ok" do
+      with_mock HTTPoison,
+        get!: fn url, _headers, options ->
+          successful_response(url: url, options: options)
+        end do
+        assert %HTTPoison.Response{} = response = Kraken.ticker!("BTCGBP")
+        assert response.status_code == 200
+        assert response.request_url == "https://api.kraken.com/0/public/Ticker"
+        assert response.request.options == [params: [pair_name: "BTCGBP"]]
+      end
+    end
+  end
 end
