@@ -13,8 +13,22 @@ defmodule CryptoApisTest do
     status_code = Keyword.get(opts, :status_code, 200)
     body = Keyword.get(opts, :body)
     headers = Keyword.get(opts, :headers, [])
-    url = Keyword.get(opts, :url)
-    %HTTPoison.Response{status_code: status_code, body: body, headers: headers, request_url: url}
+    options = Keyword.get(opts, :options, [])
+    url = Keyword.get(opts, :url, "localhost:4000")
+
+    request = %HTTPoison.Request{
+      headers: headers,
+      options: options,
+      url: url
+    }
+
+    %HTTPoison.Response{
+      status_code: status_code,
+      body: body,
+      headers: headers,
+      request_url: url,
+      request: request
+    }
   end
 
   def error_response(opts \\ []) do
@@ -23,13 +37,24 @@ defmodule CryptoApisTest do
   end
 
   describe "fetch/2" do
+    test "collects params from top-level" do
+      with_mock HTTPoison,
+        get: fn url, _headers, options ->
+          {:ok, successful_response(body: @encoded, url: url, options: options)}
+        end do
+        assert {:ok, response} = CryptoApis.fetch(@url, params: [key: :value])
+        assert response.request.options == [params: [key: :value]]
+      end
+    end
+
     test "fetch returns successful non-json responses" do
       with_mock HTTPoison,
         get: fn _url, _headers, _options ->
           {:ok, successful_response(body: @encoded)}
         end do
-        assert CryptoApis.fetch(@url) ==
-                 {:ok, %HTTPoison.Response{body: @encoded, status_code: 200}}
+        assert {:ok, response} = CryptoApis.fetch(@url)
+        assert response.body == @encoded
+        assert response.status_code == 200
       end
     end
 
@@ -38,13 +63,10 @@ defmodule CryptoApisTest do
         get: fn _url, _headers, _options ->
           {:ok, successful_response(headers: @json_headers, body: @encoded)}
         end do
-        assert CryptoApis.fetch(@url) ==
-                 {:ok,
-                  %HTTPoison.Response{
-                    body: @decoded,
-                    status_code: 200,
-                    headers: @json_headers
-                  }}
+        assert {:ok, response} = CryptoApis.fetch(@url)
+        assert response.body == @decoded
+        assert response.request.headers == @json_headers
+        assert response.status_code == 200
       end
     end
 
@@ -58,6 +80,9 @@ defmodule CryptoApisTest do
                   %HTTPoison.Response{
                     status_code: 404
                   }}
+
+        assert {:error, response} = CryptoApis.fetch(@url)
+        assert response.status_code == 404
       end
     end
 
@@ -72,13 +97,24 @@ defmodule CryptoApisTest do
   end
 
   describe "fetch!/2" do
+    test "collects params from top-level" do
+      with_mock HTTPoison,
+        get!: fn url, _headers, options ->
+          successful_response(body: @encoded, url: url, options: options)
+        end do
+        assert %HTTPoison.Response{} = response = CryptoApis.fetch!(@url, params: [key: :value])
+        assert response.request.options == [params: [key: :value]]
+      end
+    end
+
     test "fetch! returns successful non-json responses" do
       with_mock HTTPoison,
         get!: fn _url, _headers, _options ->
           successful_response(body: @encoded)
         end do
-        assert CryptoApis.fetch!(@url) ==
-                 %HTTPoison.Response{body: @encoded, status_code: 200}
+        assert %HTTPoison.Response{} = response = CryptoApis.fetch!(@url)
+        assert response.body == @encoded
+        assert response.status_code == 200
       end
     end
 
@@ -87,12 +123,10 @@ defmodule CryptoApisTest do
         get!: fn _url, _headers, _options ->
           successful_response(headers: @json_headers, body: @encoded)
         end do
-        assert CryptoApis.fetch!(@url) ==
-                 %HTTPoison.Response{
-                   body: @decoded,
-                   status_code: 200,
-                   headers: @json_headers
-                 }
+        assert %HTTPoison.Response{} = response = CryptoApis.fetch!(@url)
+        assert response.body == @decoded
+        assert response.status_code == 200
+        assert response.request.headers == @json_headers
       end
     end
 
@@ -101,9 +135,7 @@ defmodule CryptoApisTest do
         get!: fn _url, _headers, _options ->
           error_response(status_code: 500)
         end do
-        assert %HTTPoison.Response{
-          status_code: 500
-        }
+        assert %HTTPoison.Response{status_code: 500} = CryptoApis.fetch!(@url)
       end
     end
 
