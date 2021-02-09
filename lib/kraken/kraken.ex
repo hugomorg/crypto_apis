@@ -1,4 +1,10 @@
 defmodule CryptoApis.Kraken do
+  @moduledoc """
+  An API wrapper for the Kraken exchange.
+
+  Docs: https://www.kraken.com/features/api
+  """
+
   @root_url "https://api.kraken.com"
   @api_version 0
 
