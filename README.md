@@ -22,6 +22,12 @@ This project is meant to offer the user a helpful wrapper around various cryptoc
 - `prices(opts \\ [])`
 - `volume(currency, timeframe, opts \\ [])`
 
+### Bitflyer (public only)
+
+- `orders(pair, opts \\ [])`
+- `ticker(pair, opts \\ [])`
+- `trades(pair, opts \\ [])`
+
 ## Examples
 
 Under the hood, requests are made with [HTTPoison](https://github.com/edgurgel/httpoison). All requests accept an optional list of `options`, which expects 3 keys, all optional. `headers` and `options` are passed straight through to `HTTPoison`. `params` is merged into `options`.
