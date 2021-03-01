@@ -4,7 +4,23 @@ This project is meant to offer the user a helpful wrapper around various cryptoc
 
 ## Currently supported exchanges:
 
-- Kraken (public only)
+### Kraken (public only)
+
+- `asset_pairs(opts \\ [])`
+- `assets(opts \\ [])`
+- `ohlc(pair, opts \\ [])`
+- `order_book(pair, opts \\ [])`
+- `server_time(opts \\ [])`
+- `spread(pair, opts \\ [])`
+- `system_status(opts \\ [])`
+- `ticker(pair, opts \\ [])`
+- `trades(pair, opts \\ [])`
+
+### BitcoinVN (public only)
+
+- `history(opts \\ [])`
+- `prices(opts \\ [])`
+- `volume(currency, timeframe, opts \\ [])`
 
 ## Examples
 
@@ -12,7 +28,7 @@ Under the hood, requests are made with [HTTPoison](https://github.com/edgurgel/h
 
 For convenience, JSON responses are automatically decoded, and any response status code not in the OK range is regarded as an error.
 
-The `!` at the end of functions follows typical conventions. For example, `Kraken.assets` should return an `{:ok, response}` or an `{:error, response}` tuple whereas `Kraken.assets!` returns the response or raises.
+Return values follow typical conventions. For example, `Kraken.assets` should return an `{:ok, response}` or an `{:error, response}` tuple.
 
 ```elixir
 defmodule YourModule do
