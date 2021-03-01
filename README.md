@@ -24,13 +24,13 @@ This project is meant to offer the user a helpful wrapper around various cryptoc
 
 ### Bitflyer (public only)
 
-- `orders(pair, opts \\ [])`
+- `order_book(pair, opts \\ [])`
 - `ticker(pair, opts \\ [])`
 - `trades(pair, opts \\ [])`
 
 ### Bithumb (public only)
 
-- `orders(pair, opts \\ [])`
+- `order_book(pair, opts \\ [])`
 - `ticker(pair, opts \\ [])`
 - `trades(pair, opts \\ [])`
 

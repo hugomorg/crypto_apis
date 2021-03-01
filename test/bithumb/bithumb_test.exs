@@ -4,13 +4,13 @@ defmodule CryptoApis.BithumbTest do
   alias CryptoApis.Bithumb
   import CryptoApis.Fixtures
 
-  describe "orders" do
-    test "orders/1 responds ok" do
+  describe "order_book" do
+    test "order_book/1 responds ok" do
       with_mock HTTPoison,
         get: fn url, _headers, _options ->
           {:ok, successful_response(url: url)}
         end do
-        assert {:ok, response} = Bithumb.orders(:BTCKRW)
+        assert {:ok, response} = Bithumb.order_book(:BTCKRW)
         assert response.status_code == 200
         assert response.request_url == "https://api.bithumb.com/public/orderbook/BTC_KRW"
       end

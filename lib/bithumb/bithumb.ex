@@ -35,7 +35,7 @@ defmodule CryptoApis.Bithumb do
   @doc """
   https://apidocs.bithumb.com/docs/order_book
   """
-  def orders(pair, opts \\ []) do
+  def order_book(pair, opts \\ []) do
     get(:orders, pair, opts)
   end
 

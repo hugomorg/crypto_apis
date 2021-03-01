@@ -39,7 +39,7 @@ defmodule CryptoApis.Bitflyer do
   @doc """
   https://lightning.bitflyer.com/docs?lang=en#order-book
   """
-  def orders(pair, opts \\ []) do
+  def order_book(pair, opts \\ []) do
     get(:orders, pair, opts)
   end
 
