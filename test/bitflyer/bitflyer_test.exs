@@ -38,7 +38,7 @@ defmodule CryptoApis.BitflyerTest do
         get: fn url, _headers, options ->
           {:ok, successful_response(url: url, options: options)}
         end do
-        assert {:ok, response} = Bitflyer.trades(:BTCJPY)
+        assert {:ok, response} = Bitflyer.trades({:BTC, "JPY"})
         assert response.status_code == 200
         assert response.request_url == "https://api.bitflyer.com/v1/executions"
         assert response.request.options == [params: [product_code: "BTC_JPY"]]
