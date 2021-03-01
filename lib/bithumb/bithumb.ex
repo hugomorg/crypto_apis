@@ -10,7 +10,7 @@ defmodule CryptoApis.Bithumb do
   @root_url "https://api.bithumb.com/public"
 
   defp get_pair({_, _} = pair), do: pair
-  defp get_pair(pair), do: CryptoApis.split_pair(pair)
+  defp get_pair(pair), do: CryptoApis.Utils.split_pair(pair)
 
   defp get(type, pair, opts) do
     {crypto, fiat} = get_pair(pair)

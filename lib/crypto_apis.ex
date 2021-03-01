@@ -3,15 +3,6 @@ defmodule CryptoApis do
   Documentation for `CryptoApis`.
   """
 
-  def override_params(opts, key, value) do
-    params =
-      opts
-      |> Keyword.get(:params, [])
-      |> Keyword.put(key, value)
-
-    Keyword.put(opts, :params, params)
-  end
-
   defp get_params(opts) do
     opts
     |> Keyword.get(:params)
@@ -34,18 +25,29 @@ defmodule CryptoApis do
     {opts, [params: params]}
   end
 
-  defp handle_response(
-         {_status, %HTTPoison.Response{status_code: status_code, headers: headers} = resp}
+  defp maybe_parse_json({:ok, %HTTPoison.Response{headers: headers} = resp}, true) do
+    if json?(headers) do
+      parse_json(resp)
+    else
+      {:ok, resp}
+    end
+  end
+
+  defp maybe_parse_json(resp, _), do: resp
+
+  defp validate_status(
+         {:ok, %HTTPoison.Response{status_code: status_code} = resp} = result,
+         success_status?
        )
-       when status_code >= 200 and status_code < 300 do
-    if json?(headers), do: parse_json(resp), else: {:ok, resp}
+       when is_function(success_status?, 1) do
+    if success_status?.(status_code) do
+      result
+    else
+      {:error, resp}
+    end
   end
 
-  defp handle_response({_status, %HTTPoison.Response{} = resp}) do
-    {:error, resp}
-  end
-
-  defp handle_response({:error, _error} = result), do: result
+  defp validate_status(resp, _), do: resp
 
   defp parse_json(%HTTPoison.Response{body: body} = resp) do
     case Jason.decode(body) do
@@ -65,20 +67,19 @@ defmodule CryptoApis do
   defp json_header?(_value), do: false
 
   def get(url, opts \\ []) when is_binary(url) do
+    {parse_json?, opts} = Keyword.pop(opts, :parse_json?, true)
+    {success_status?, opts} = Keyword.pop(opts, :success_status?, &(&1 in 200..299))
     {options, headers} = get_opts(opts)
 
     url
     |> HTTPoison.get(headers, options)
-    |> handle_response()
+    |> maybe_parse_json(parse_json?)
+    |> validate_status(success_status?)
   end
 
   defp get_opts(opts) do
     options = opts |> get_params |> Keyword.get(:options, [])
     headers = Keyword.get(opts, :headers, [])
     {options, headers}
-  end
-
-  def split_pair(pair) do
-    "#{pair}" |> String.split_at(-3)
   end
 end

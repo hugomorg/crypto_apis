@@ -13,11 +13,11 @@ defmodule CryptoApis.Bitflyer do
   alias CryptoApis
 
   defp get_pair({_, _} = pair), do: pair
-  defp get_pair(pair), do: CryptoApis.split_pair(pair)
+  defp get_pair(pair), do: CryptoApis.Utils.split_pair(pair)
 
   defp get(type, pair, opts) do
     {crypto, fiat} = get_pair(pair)
-    opts = CryptoApis.override_params(opts, :product_code, "#{crypto}_#{fiat}")
+    opts = CryptoApis.Utils.override_params(opts, :product_code, "#{crypto}_#{fiat}")
 
     type
     |> url()
