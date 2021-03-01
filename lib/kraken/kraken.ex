@@ -19,39 +19,39 @@ defmodule CryptoApis.Kraken do
     |> CryptoApis.get(opts)
   end
 
-  def url(:server_time) do
+  defp url(:server_time) do
     build_public_url("Time")
   end
 
-  def url(:system_status) do
+  defp url(:system_status) do
     build_public_url("SystemStatus")
   end
 
-  def url(:assets) do
+  defp url(:assets) do
     build_public_url("Assets")
   end
 
-  def url(:asset_pairs) do
+  defp url(:asset_pairs) do
     build_public_url("AssetPairs")
   end
 
-  def url(:ticker) do
+  defp url(:ticker) do
     build_public_url("Ticker")
   end
 
-  def url(:ohlc) do
+  defp url(:ohlc) do
     build_public_url("OHLC")
   end
 
-  def url(:order_book) do
+  defp url(:order_book) do
     build_public_url("Depth")
   end
 
-  def url(:trades) do
+  defp url(:trades) do
     build_public_url("Trades")
   end
 
-  def url(:spread) do
+  defp url(:spread) do
     build_public_url("Spread")
   end
 

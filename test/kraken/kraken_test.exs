@@ -4,44 +4,6 @@ defmodule CryptoApis.KrakenTest do
   alias CryptoApis.Kraken
   import CryptoApis.Fixtures
 
-  describe "url/1" do
-    test "url for server time" do
-      assert Kraken.url(:server_time) == "https://api.kraken.com/0/public/Time"
-    end
-
-    test "url for system status" do
-      assert Kraken.url(:system_status) == "https://api.kraken.com/0/public/SystemStatus"
-    end
-
-    test "url for assets" do
-      assert Kraken.url(:assets) == "https://api.kraken.com/0/public/Assets"
-    end
-
-    test "url for asset_pairs" do
-      assert Kraken.url(:asset_pairs) == "https://api.kraken.com/0/public/AssetPairs"
-    end
-
-    test "url for ticker" do
-      assert Kraken.url(:ticker) == "https://api.kraken.com/0/public/Ticker"
-    end
-
-    test "url for OHLC" do
-      assert Kraken.url(:ohlc) == "https://api.kraken.com/0/public/OHLC"
-    end
-
-    test "url for order book" do
-      assert Kraken.url(:order_book) == "https://api.kraken.com/0/public/Depth"
-    end
-
-    test "url for trades" do
-      assert Kraken.url(:trades) == "https://api.kraken.com/0/public/Trades"
-    end
-
-    test "url for spread" do
-      assert Kraken.url(:spread) == "https://api.kraken.com/0/public/Spread"
-    end
-  end
-
   describe "server time" do
     test "server_time/1 responds ok" do
       with_mock HTTPoison,

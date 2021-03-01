@@ -4,20 +4,6 @@ defmodule CryptoApis.BitcoinVNTest do
   alias CryptoApis.BitcoinVN
   import CryptoApis.Fixtures
 
-  describe "url/1" do
-    test "url for prices" do
-      assert BitcoinVN.url(:prices) == "https://api.bitcoinvn.io/api/prices"
-    end
-
-    test "url for history" do
-      assert BitcoinVN.url(:history) == "https://api.bitcoinvn.io/api/history"
-    end
-
-    test "url for volume" do
-      assert BitcoinVN.url(:volume, "VND", "24h") == "https://api.bitcoinvn.io/api/volume/VND/24h"
-    end
-  end
-
   describe "prices" do
     test "prices/1 responds ok" do
       with_mock HTTPoison,

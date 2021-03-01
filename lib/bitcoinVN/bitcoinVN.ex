@@ -18,11 +18,11 @@ defmodule CryptoApis.BitcoinVN do
     |> CryptoApis.get(opts)
   end
 
-  def url(:volume, currency, timeframe) do
+  defp url(:volume, currency, timeframe) do
     build_public_url(:volume, currency, timeframe)
   end
 
-  def url(resource) do
+  defp url(resource) do
     build_public_url(resource)
   end
 
