@@ -91,7 +91,7 @@ defmodule CryptoApis.Kraken do
   https://www.kraken.com/features/api#get-ticker-info
   """
   def ticker(pair_name, opts \\ []) when is_atom(pair_name) or is_binary(pair_name) do
-    opts = CryptoApis.Utils.override_params(opts, :pair_name, pair_name)
+    opts = Keyword.put(opts, :params, pair_name: pair_name)
 
     get(:ticker, opts)
   end
@@ -100,7 +100,7 @@ defmodule CryptoApis.Kraken do
   https://www.kraken.com/features/api#get-ohlc-data
   """
   def ohlc(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
-    opts = CryptoApis.Utils.override_params(opts, :pair, pair)
+    opts = Keyword.put(opts, :params, pair: pair)
 
     get(:ohlc, opts)
   end
@@ -109,7 +109,7 @@ defmodule CryptoApis.Kraken do
   https://www.kraken.com/features/api#get-order-book
   """
   def order_book(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
-    opts = CryptoApis.Utils.override_params(opts, :pair, pair)
+    opts = Keyword.put(opts, :params, pair: pair)
 
     get(:order_book, opts)
   end
@@ -118,7 +118,7 @@ defmodule CryptoApis.Kraken do
   https://www.kraken.com/features/api#get-recent-trades
   """
   def trades(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
-    opts = CryptoApis.Utils.override_params(opts, :pair, pair)
+    opts = Keyword.put(opts, :params, pair: pair)
 
     get(:trades, opts)
   end
@@ -127,7 +127,7 @@ defmodule CryptoApis.Kraken do
   https://www.kraken.com/features/api#get-recent-spread-data
   """
   def spread(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
-    opts = CryptoApis.Utils.override_params(opts, :pair, pair)
+    opts = Keyword.put(opts, :params, pair: pair)
 
     get(:spread, opts)
   end

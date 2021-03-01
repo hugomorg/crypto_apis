@@ -17,7 +17,7 @@ defmodule CryptoApis.Bitflyer do
 
   defp get(type, pair, opts) do
     {crypto, fiat} = get_pair(pair)
-    opts = CryptoApis.Utils.override_params(opts, :product_code, "#{crypto}_#{fiat}")
+    opts = Keyword.put(opts, :params, product_code: "#{crypto}_#{fiat}")
 
     type
     |> url()

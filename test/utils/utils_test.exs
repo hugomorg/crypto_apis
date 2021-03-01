@@ -7,14 +7,4 @@ defmodule CryptoApis.UtilsTest do
       assert CryptoApis.Utils.split_pair(:USDTGBP) == {"USDT", "GBP"}
     end
   end
-
-  describe "override_params/3" do
-    test "overrides params key with value" do
-      original = [params: [key: :value]]
-
-      assert CryptoApis.Utils.override_params(original, :key, :new_value) == [
-               params: [key: :new_value]
-             ]
-    end
-  end
 end
