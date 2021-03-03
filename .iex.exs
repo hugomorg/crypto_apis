@@ -2,5 +2,8 @@ alias CryptoApis.{
   Bitflyer,
   BitcoinVN,
   Kraken,
-  Bithumb
+  Bithumb,
+  Bitkub,
+  Bitstamp,
+  Coinbase
 }
