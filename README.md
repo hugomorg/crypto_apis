@@ -2,6 +2,16 @@
 
 This project is meant to offer the user a helpful wrapper around various cryptocurrency exchange APIs, so you don't have to worry about the low-level details.
 
+Pair can be any one of the following formats (using "BTCUSD" as an example):
+
+```elixir
+  {:BTC, :USD}
+  {:BTC, "USD"}
+  {"BTC", :USD}
+  "BTCUSD"
+  :BTCUSD
+```
+
 ## Currently supported exchanges:
 
 ### Kraken (public only)
@@ -31,6 +41,24 @@ This project is meant to offer the user a helpful wrapper around various cryptoc
 ### Bithumb (public only)
 
 - `order_book(pair, opts \\ [])`
+- `ticker(pair, opts \\ [])`
+- `trades(pair, opts \\ [])`
+
+### Bitkub (public only)
+
+- `order_book(pair, limit \\ 100, opts \\ [])`
+- `ticker(pair \\ nil, opts \\ [])`
+- `trades(pair, limit \\ 100, opts \\ [])`
+
+### Bitstamp (public only)
+
+- `order_book(pair, opts \\ [])`
+- `ticker(pair, opts \\ [])`
+- `trades(pair, opts \\ [])`
+
+### Coinbase (public only)
+
+- `order_book(pair, level \\ nil, opts \\ [])`
 - `ticker(pair, opts \\ [])`
 - `trades(pair, opts \\ [])`
 
