@@ -77,6 +77,12 @@ defmodule CryptoApis do
     |> validate_status(success_status?)
   end
 
+  def data(url, opts \\ []) do
+    with {:ok, %HTTPoison.Response{body: body}} <- get(url, opts) do
+      {:ok, body}
+    end
+  end
+
   defp get_opts(opts) do
     options = opts |> get_params |> Keyword.get(:options, [])
     headers = Keyword.get(opts, :headers, [])

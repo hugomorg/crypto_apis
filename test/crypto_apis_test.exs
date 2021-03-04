@@ -69,4 +69,26 @@ defmodule CryptoApisTest do
       end
     end
   end
+
+  describe "data/2" do
+    test "data returns successful non-json responses" do
+      with_mock HTTPoison,
+        get: fn _url, _headers, _options ->
+          {:ok, successful_response(body: @encoded)}
+        end do
+        assert {:ok, response} = CryptoApis.data(@url)
+        assert response == @encoded
+      end
+    end
+
+    test "data returns successful json responses" do
+      with_mock HTTPoison,
+        get: fn _url, _headers, _options ->
+          {:ok, successful_response(headers: @json_headers, body: @encoded)}
+        end do
+        assert {:ok, response} = CryptoApis.data(@url)
+        assert response == @decoded
+      end
+    end
+  end
 end
