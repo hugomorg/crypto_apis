@@ -5,5 +5,6 @@ alias CryptoApis.{
   Bithumb,
   Bitkub,
   Bitstamp,
-  Coinbase
+  Coinbase,
+  Coinfloor
 }
