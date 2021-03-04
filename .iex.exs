@@ -7,5 +7,6 @@ alias CryptoApis.{
   Bitstamp,
   Coinbase,
   Coinfloor,
-  CoinsPH
+  CoinsPH,
+  Cryptomkt
 }

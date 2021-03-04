@@ -72,6 +72,12 @@ Pair can be any one of the following formats (using "BTCUSD" as an example):
 
 - `rates(pair \\ nil, region \\ nil, opts \\ [])`
 
+### Cryptomkt (public only)
+
+- `order_book(pair, params \\ [], opts \\ [])`
+- `ticker(pair, opts \\ [])`
+- `trades(pair, params \\ [], opts \\ [])`
+
 ## Examples
 
 Under the hood, requests are made with [HTTPoison](https://github.com/edgurgel/httpoison). All requests accept an optional list of `options`, which expects 3 keys, all optional. `headers` and `options` are passed straight through to `HTTPoison`. `params` is merged into `options`.
