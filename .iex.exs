@@ -8,5 +8,7 @@ alias CryptoApis.{
   Coinbase,
   Coinfloor,
   CoinsPH,
-  Cryptomkt
+  Cryptomkt,
+  IndependentReserve,
+  Indodax
 }
