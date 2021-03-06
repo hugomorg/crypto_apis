@@ -8,7 +8,7 @@ defmodule CryptoApis.Remitano do
   alias CryptoApis.Utils
 
   defp get(resource, pair, params, opts) do
-    pair = Utils.pair_from_tuple(pair)
+    pair = Utils.pair_to_string(pair)
 
     resource
     |> url(pair)
