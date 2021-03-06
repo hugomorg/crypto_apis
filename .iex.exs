@@ -12,5 +12,7 @@ alias CryptoApis.{
   IndependentReserve,
   Indodax,
   Utils,
-  Nairaex
+  Nairaex,
+  Remitano,
+  Satang
 }
