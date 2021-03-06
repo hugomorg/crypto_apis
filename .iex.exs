@@ -10,5 +10,7 @@ alias CryptoApis.{
   CoinsPH,
   Cryptomkt,
   IndependentReserve,
-  Indodax
+  Indodax,
+  Utils,
+  Nairaex
 }
