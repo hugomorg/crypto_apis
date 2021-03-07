@@ -14,5 +14,7 @@ alias CryptoApis.{
   Utils,
   Nairaex,
   Remitano,
-  Satang
+  Satang,
+  Pair,
+  Upbit
 }
