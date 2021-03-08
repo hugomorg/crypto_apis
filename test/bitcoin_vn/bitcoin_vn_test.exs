@@ -4,8 +4,34 @@ defmodule CryptoApis.BitcoinVNTest do
   alias CryptoApis.BitcoinVN
   import CryptoApis.Fixtures
 
+  describe "bank_accounts" do
+    test "bank_accounts/0 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, _options ->
+          {:ok, successful_response(url: url)}
+        end do
+        assert {:ok, response} = BitcoinVN.bank_accounts()
+        assert response.status_code == 200
+        assert response.request_url == "https://api.bitcoinvn.io/api/constants/bankaccounts"
+      end
+    end
+  end
+
+  describe "constraints" do
+    test "constraints/0 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, _options ->
+          {:ok, successful_response(url: url)}
+        end do
+        assert {:ok, response} = BitcoinVN.constraints()
+        assert response.status_code == 200
+        assert response.request_url == "https://api.bitcoinvn.io/api/constants/constraints"
+      end
+    end
+  end
+
   describe "prices" do
-    test "prices/1 responds ok" do
+    test "prices/0 responds ok" do
       with_mock HTTPoison,
         get: fn url, _headers, _options ->
           {:ok, successful_response(url: url)}
@@ -18,7 +44,7 @@ defmodule CryptoApis.BitcoinVNTest do
   end
 
   describe "history" do
-    test "history/1 responds ok" do
+    test "history/0 responds ok" do
       with_mock HTTPoison,
         get: fn url, _headers, _options ->
           {:ok, successful_response(url: url)}
@@ -31,7 +57,7 @@ defmodule CryptoApis.BitcoinVNTest do
   end
 
   describe "volume" do
-    test "volume/3 responds ok" do
+    test "volume/2 responds ok" do
       with_mock HTTPoison,
         get: fn url, _headers, _options ->
           {:ok, successful_response(url: url)}

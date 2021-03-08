@@ -1,58 +1,62 @@
 defmodule CryptoApis.BitcoinVN do
   @moduledoc """
-  An API wrapper for the BitcoinVN exchange.
-
-  Docs: https://api.bitcoinvn.io
-
-  Currently only supports public endpoints.
-
+  https://api.bitcoinvn.io
   """
 
   @root_url "https://api.bitcoinvn.io/api"
 
-  alias CryptoApis
-
-  defp get(type, opts) do
-    type
-    |> url()
-    |> CryptoApis.get(opts)
-  end
-
   defp url(:volume, currency, timeframe) do
-    build_public_url(:volume, currency, timeframe)
+    "#{@root_url}/volume/#{currency}/#{timeframe}"
   end
 
-  defp url(resource) do
-    build_public_url(resource)
+  defp url(:prices) do
+    @root_url <> "/prices"
   end
 
-  defp build_public_url(url = :volume, currency, timeframe) do
-    build_public_url(url) <> "/#{currency}/#{timeframe}"
+  defp url(:history) do
+    @root_url <> "/history"
   end
 
-  defp build_public_url(resource) do
-    "#{@root_url}/#{resource}"
+  defp url(:bank_accounts) do
+    @root_url <> "/constants/bankaccounts"
+  end
+
+  defp url(:constraints) do
+    @root_url <> "/constants/constraints"
   end
 
   @doc """
   https://api.bitcoinvn.io/#get--api-prices
   """
   def prices(opts \\ []) do
-    get(:prices, opts)
+    :prices |> url() |> CryptoApis.get(opts)
   end
 
   @doc """
   https://api.bitcoinvn.io/#get--api-history
   """
   def history(opts \\ []) do
-    get(:history, opts)
+    :history |> url() |> CryptoApis.get(opts)
   end
 
   @doc """
   https://api.bitcoinvn.io/#get--api-volume-{currency}-{timeframe}
   """
   def volume(currency, timeframe, opts \\ []) do
-    url = url(:volume, currency, timeframe)
-    CryptoApis.get(url, opts)
+    :volume |> url(currency, timeframe) |> CryptoApis.get(opts)
+  end
+
+  @doc """
+  https://api.bitcoinvn.io/#get--api-constants-bankaccounts
+  """
+  def bank_accounts(opts \\ []) do
+    :bank_accounts |> url() |> CryptoApis.get(opts)
+  end
+
+  @doc """
+  https://api.bitcoinvn.io/#get--api-constants-constraints
+  """
+  def constraints(opts \\ []) do
+    :constraints |> url() |> CryptoApis.get(opts)
   end
 end
