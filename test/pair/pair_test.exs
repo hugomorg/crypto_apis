@@ -50,6 +50,11 @@ defmodule CryptoApis.PairTest do
       pair = Pair.new(:BTC, "VND")
       assert Pair.join(pair, "|") == "BTC|VND"
     end
+
+    test "join/2 with options" do
+      pair = Pair.new(:BTC, "VND")
+      assert Pair.join(pair, "-", downcase?: true, invert?: true) == "vnd-btc"
+    end
   end
 
   describe "implements String.Chars" do

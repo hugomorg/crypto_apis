@@ -28,7 +28,19 @@ defmodule CryptoApis.Pair do
 
   def to_tuple(%Pair{crypto: crypto, fiat: fiat}), do: {crypto, fiat}
 
-  def join(%Pair{crypto: crypto, fiat: fiat}, delimiter \\ "") do
-    "#{crypto}#{delimiter}#{fiat}"
+  def join(%Pair{crypto: crypto, fiat: fiat}, delimiter \\ "", opts \\ []) do
+    downcase? = opts[:downcase?]
+    invert? = opts[:invert?]
+
+    crypto
+    |> invert(fiat, invert?)
+    |> stringify(delimiter)
+    |> downcase(downcase?)
   end
+
+  defp downcase(string, true), do: String.downcase(string)
+  defp downcase(string, _), do: String.upcase(string)
+  defp invert(crypto, fiat, true), do: {fiat, crypto}
+  defp invert(crypto, fiat, _), do: {crypto, fiat}
+  defp stringify({crypto, fiat}, delimiter), do: "#{crypto}#{delimiter}#{fiat}"
 end
