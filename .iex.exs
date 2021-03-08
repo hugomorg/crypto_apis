@@ -16,5 +16,6 @@ alias CryptoApis.{
   Remitano,
   Satang,
   Pair,
-  Upbit
+  Upbit,
+  Zaif
 }
