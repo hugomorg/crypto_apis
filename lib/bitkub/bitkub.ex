@@ -1,50 +1,26 @@
 defmodule CryptoApis.Bitkub do
   @moduledoc """
-  An API wrapper for the Bitkub exchange.
-
-  Docs: https://github.com/bitkub/bitkub-official-api-docs
-
-  Currently only supports public endpoints.
-
+  https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md
   """
 
   @root_url "https://api.bitkub.com/api"
 
-  alias CryptoApis
-
-  defp get_pair({_, _} = pair), do: pair
-  defp get_pair(pair), do: CryptoApis.Utils.split_pair(pair)
-
-  defp process_params(params) do
-    pair = Keyword.get(params, :pair)
-    limit = Keyword.get(params, :limit)
-    process_pair(pair) ++ process_limit(limit)
-  end
-
-  defp process_limit(nil), do: []
-
-  defp process_limit(limit) do
-    [lmt: limit]
-  end
-
-  defp process_pair(nil), do: []
+  alias CryptoApis.Pair
 
   defp process_pair(pair) do
-    {crypto, fiat} = get_pair(pair)
-    [sym: "#{fiat}_#{crypto}"]
+    pair |> Pair.new() |> Pair.join(delimiter: "_", invert?: true)
   end
 
-  defp get(type, params, opts) do
-    processed = process_params(params)
-    opts = Keyword.put(opts, :params, processed)
-
-    type
-    |> url()
-    |> CryptoApis.get(opts)
-  end
-
-  defp url(:orders) do
+  defp url(:order_book) do
     market_url() <> "/books"
+  end
+
+  defp url(:bids) do
+    market_url() <> "/bids"
+  end
+
+  defp url(:asks) do
+    market_url() <> "/asks"
   end
 
   defp url(:ticker) do
@@ -55,26 +31,100 @@ defmodule CryptoApis.Bitkub do
     market_url() <> "/trades"
   end
 
+  defp url(:status) do
+    @root_url <> "/status"
+  end
+
+  defp url(:server_time) do
+    @root_url <> "/servertime"
+  end
+
+  defp url(:symbols) do
+    market_url() <> "/symbols"
+  end
+
+  defp url(:depth) do
+    market_url() <> "/depth"
+  end
+
   defp market_url, do: @root_url <> "/market"
+
+  defp put_pair(params \\ [], pair) do
+    params |> Keyword.put(:sym, process_pair(pair))
+  end
+
+  defp put_limit(params, limit) do
+    params |> Keyword.put(:lmt, limit)
+  end
+
+  @doc """
+  https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#get-apistatus
+  """
+  def status(opts \\ []) do
+    :status |> url() |> CryptoApis.get(opts)
+  end
+
+  @doc """
+  https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#get-apimarketsymbols
+  """
+  def symbols(opts \\ []) do
+    :symbols |> url() |> CryptoApis.get(opts)
+  end
+
+  @doc """
+  https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#get-apiservertime
+  """
+  def server_time(opts \\ []) do
+    :server_time |> url() |> CryptoApis.get(opts)
+  end
 
   @doc """
   https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#description-7
   """
   def order_book(pair, limit \\ 100, opts \\ []) do
-    get(:orders, [pair: pair, limit: limit], opts)
+    params = put_pair(pair) |> put_limit(limit)
+    :order_book |> url() |> CryptoApis.get(opts ++ [params: params])
+  end
+
+  @doc """
+  https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#get-apimarketbids
+  """
+  def bids(pair, limit \\ 100, opts \\ []) do
+    params = put_pair(pair) |> put_limit(limit)
+    :bids |> url() |> CryptoApis.get(opts ++ [params: params])
+  end
+
+  @doc """
+  https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#get-apimarketasks
+  """
+  def asks(pair, limit \\ 100, opts \\ []) do
+    params = put_pair(pair) |> put_limit(limit)
+    :asks |> url() |> CryptoApis.get(opts ++ [params: params])
   end
 
   @doc """
   https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#get-apimarketticker
   """
+
   def ticker(pair \\ nil, opts \\ []) do
-    get(:ticker, [pair: pair], opts)
+    params = if pair, do: put_pair(pair), else: nil
+    opts = if params, do: opts ++ [params: params], else: opts
+    :ticker |> url() |> CryptoApis.get(opts)
   end
 
-  # @doc """
-  # https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#get-apimarkettrades
-  # """
+  @doc """
+  https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#get-apimarkettrades
+  """
   def trades(pair, limit \\ 100, opts \\ []) do
-    get(:trades, [pair: pair, limit: limit], opts)
+    params = put_pair(pair) |> put_limit(limit)
+    :trades |> url() |> CryptoApis.get(opts ++ [params: params])
+  end
+
+  @doc """
+  https://github.com/bitkub/bitkub-official-api-docs/blob/master/restful-api.md#get-apimarketdepth
+  """
+  def depth(pair, limit \\ 100, opts \\ []) do
+    params = put_pair(pair) |> put_limit(limit)
+    :depth |> url() |> CryptoApis.get(opts ++ [params: params])
   end
 end
