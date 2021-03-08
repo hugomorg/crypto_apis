@@ -31,7 +31,7 @@ defmodule CryptoApis.Zaif do
     "#{@root_url}/depth/#{pair}"
   end
 
-  defp process_pair(pair), do: pair |> Pair.new() |> Pair.join("_", downcase?: true)
+  defp process_pair(pair), do: pair |> Pair.new() |> Pair.join(delimiter: "_", downcase?: true)
 
   @doc """
   https://zaif-api-document.readthedocs.io/ja/latest/PublicAPI.html#id7
