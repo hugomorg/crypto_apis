@@ -1,24 +1,22 @@
 defmodule CryptoApis.Coinfloor do
   @moduledoc """
-  An API wrapper for the Coinfloor exchange.
-
-  Docs: https://github.com/coinfloor/API/blob/master/BIST.md
-
-  Currently only supports public endpoints.
+  https://github.com/coinfloor/API/blob/master/BIST.md
   """
 
   @root_url "https://webapi.coinfloor.co.uk/bist"
 
-  alias CryptoApis
+  alias CryptoApis.Pair
 
-  defp get_pair({_, _} = pair), do: pair
-  defp get_pair(pair), do: CryptoApis.Utils.split_pair(pair)
+  defp process_pair(pair) do
+    pair |> Pair.new() |> Pair.to_tuple()
+  end
+
   defp parse_crypto("BTC"), do: "XBT"
   defp parse_crypto(:BTC), do: "XBT"
   defp parse_crypto(crypto), do: crypto
 
   defp get(type, pair, opts) do
-    {crypto, fiat} = get_pair(pair)
+    {crypto, fiat} = process_pair(pair)
 
     type
     |> url(parse_crypto(crypto), fiat)
