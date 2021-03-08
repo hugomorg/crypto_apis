@@ -46,14 +46,9 @@ defmodule CryptoApis.PairTest do
       assert Pair.join(pair) == "BTCVND"
     end
 
-    test "join/1 uses delimiter" do
+    test "join/1 with options" do
       pair = Pair.new(:BTC, "VND")
-      assert Pair.join(pair, "|") == "BTC|VND"
-    end
-
-    test "join/2 with options" do
-      pair = Pair.new(:BTC, "VND")
-      assert Pair.join(pair, "-", downcase?: true, invert?: true) == "vnd-btc"
+      assert Pair.join(pair, delimiter: "-", downcase?: true, invert?: true) == "vnd-btc"
     end
   end
 
