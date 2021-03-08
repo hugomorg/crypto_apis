@@ -28,9 +28,10 @@ defmodule CryptoApis.Pair do
 
   def to_tuple(%Pair{crypto: crypto, fiat: fiat}), do: {crypto, fiat}
 
-  def join(%Pair{crypto: crypto, fiat: fiat}, delimiter \\ "", opts \\ []) do
+  def join(%Pair{crypto: crypto, fiat: fiat}, opts \\ []) do
     downcase? = opts[:downcase?]
     invert? = opts[:invert?]
+    delimiter = opts[:delimiter] || ""
 
     crypto
     |> invert(fiat, invert?)
