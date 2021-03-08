@@ -1,22 +1,18 @@
 defmodule CryptoApis.CoinsPH do
   @moduledoc """
-  An API wrapper for the bitFlyer exchange.
-
-  Docs: https://docs.coins.asia/docs/market-rates-v2
-
-  Currently only supports public endpoints.
+  https://docs.coins.asia/docs/market-rates-v2
   """
 
   @root_url "https://quote.coins.ph/v2"
 
-  alias CryptoApis
+  alias CryptoApis.Pair
 
-  defp get_pair(nil), do: nil
-  defp get_pair({_, _} = pair), do: pair
-  defp get_pair(pair), do: CryptoApis.Utils.split_pair(pair)
+  defp process_pair(pair) do
+    pair |> Pair.new() |> Pair.join(delimiter: "-")
+  end
 
   defp get(type, pair, opts) do
-    pair = get_pair(pair)
+    pair = pair && process_pair(pair)
 
     type
     |> url(pair)
@@ -27,8 +23,8 @@ defmodule CryptoApis.CoinsPH do
     @root_url <> "/markets"
   end
 
-  defp url(:orders, {crypto, fiat}) do
-    @root_url <> "/markets/#{crypto}-#{fiat}"
+  defp url(:orders, pair) do
+    @root_url <> "/markets/#{pair}"
   end
 
   def rates(pair \\ nil, region \\ nil, opts \\ []) do
