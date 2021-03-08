@@ -1,23 +1,24 @@
 defmodule CryptoApis.Bitflyer do
   @moduledoc """
-  An API wrapper for the bitFlyer exchange.
-
-  Docs: https://lightning.bitflyer.com/docs?lang=en#http-public-api
-
-  Currently only supports public endpoints.
-
+  https://lightning.bitflyer.com/docs?lang=en#http-public-api
   """
 
   @root_url "https://api.bitflyer.com/v1"
 
-  alias CryptoApis
+  alias CryptoApis.Pair
 
-  defp get_pair({_, _} = pair), do: pair
-  defp get_pair(pair), do: CryptoApis.Utils.split_pair(pair)
+  defp process_pair(pair) do
+    pair
+    |> Pair.new()
+    |> Pair.join(delimiter: "_")
+  end
 
-  defp get(type, pair, opts) do
-    {crypto, fiat} = get_pair(pair)
-    opts = Keyword.put(opts, :params, product_code: "#{crypto}_#{fiat}")
+  defp get(type, pair, params \\ [], opts) do
+    pair = process_pair(pair)
+
+    params = params ++ [product_code: pair]
+
+    opts = Keyword.put(opts, :params, params)
 
     type
     |> url()
@@ -34,6 +35,22 @@ defmodule CryptoApis.Bitflyer do
 
   defp url(:trades) do
     @root_url <> "/executions"
+  end
+
+  defp url(:markets) do
+    @root_url <> "/markets"
+  end
+
+  defp url(:order_book_status) do
+    @root_url <> "/getboardstate"
+  end
+
+  defp url(:exchange_status) do
+    @root_url <> "/gethealth"
+  end
+
+  defp url(:chats) do
+    @root_url <> "/getchats"
   end
 
   @doc """
@@ -53,7 +70,43 @@ defmodule CryptoApis.Bitflyer do
   @doc """
   https://lightning.bitflyer.com/docs?lang=en#execution-history
   """
-  def trades(pair, opts \\ []) do
-    get(:trades, pair, opts)
+  def trades(pair, params \\ [], opts \\ []) do
+    get(:trades, pair, params, opts)
+  end
+
+  @doc """
+  https://lightning.bitflyer.com/docs?lang=en#market-list
+  """
+  def markets(opts \\ []) do
+    :markets
+    |> url()
+    |> CryptoApis.get(opts)
+  end
+
+  @doc """
+  https://lightning.bitflyer.com/docs?lang=en#orderbook-status
+  """
+  def order_book_status(opts \\ []) do
+    :order_book_status
+    |> url()
+    |> CryptoApis.get(opts)
+  end
+
+  @doc """
+  https://lightning.bitflyer.com/docs?lang=en#exchange-status
+  """
+  def exchange_status(opts \\ []) do
+    :exchange_status
+    |> url()
+    |> CryptoApis.get(opts)
+  end
+
+  @doc """
+  https://lightning.bitflyer.com/docs?lang=en#chat
+  """
+  def chats(params \\ [], opts \\ []) do
+    :chats
+    |> url()
+    |> CryptoApis.get(opts ++ [params: params])
   end
 end
