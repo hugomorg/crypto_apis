@@ -4,6 +4,19 @@ defmodule CryptoApis.CryptomktTest do
   alias CryptoApis.Cryptomkt
   import CryptoApis.Fixtures
 
+  describe "markets" do
+    test "markets/0 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, options ->
+          {:ok, successful_response(url: url, options: options)}
+        end do
+        assert {:ok, response} = Cryptomkt.markets()
+        assert response.status_code == 200
+        assert response.request_url == "https://api.cryptomkt.com/v1/market"
+      end
+    end
+  end
+
   describe "order_book" do
     test "order_book/2 responds ok" do
       with_mock HTTPoison,
@@ -13,7 +26,7 @@ defmodule CryptoApis.CryptomktTest do
         assert {:ok, response} = Cryptomkt.order_book(:BTCARS, "buy")
         assert response.status_code == 200
         assert response.request_url == "https://api.cryptomkt.com/v1/book"
-        assert response.request.options == [params: [market: :BTCARS, type: "buy"]]
+        assert response.request.options == [params: [market: "BTCARS", type: "buy"]]
       end
     end
 
@@ -25,7 +38,33 @@ defmodule CryptoApis.CryptomktTest do
         assert {:ok, response} = Cryptomkt.order_book(:BTCARS, "buy", page: 2)
         assert response.status_code == 200
         assert response.request_url == "https://api.cryptomkt.com/v1/book"
-        assert response.request.options == [params: [page: 2, market: :BTCARS, type: "buy"]]
+        assert response.request.options == [params: [page: 2, market: "BTCARS", type: "buy"]]
+      end
+    end
+  end
+
+  describe "prices" do
+    test "prices/2 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, options ->
+          {:ok, successful_response(url: url, options: options)}
+        end do
+        assert {:ok, response} = Cryptomkt.prices(:BTCARS, 1)
+        assert response.status_code == 200
+        assert response.request_url == "https://api.cryptomkt.com/v1/prices"
+        assert response.request.options == [params: [market: "BTCARS", timeframe: 1]]
+      end
+    end
+
+    test "prices/3 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, options ->
+          {:ok, successful_response(url: url, options: options)}
+        end do
+        assert {:ok, response} = Cryptomkt.prices(:BTCARS, 1, page: 2)
+        assert response.status_code == 200
+        assert response.request_url == "https://api.cryptomkt.com/v1/prices"
+        assert response.request.options == [params: [page: 2, market: "BTCARS", timeframe: 1]]
       end
     end
   end
