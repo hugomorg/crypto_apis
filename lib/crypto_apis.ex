@@ -3,26 +3,12 @@ defmodule CryptoApis do
   Documentation for `CryptoApis`.
   """
 
-  defp get_params(opts) do
-    opts
-    |> Keyword.get(:params)
-    |> merge_params(opts)
-  end
+  defp merge_params(options, opts) do
+    option_params = options[:params] || []
+    additional_params = opts[:params] || []
 
-  defp merge_params(params, opts) when is_list(params) or is_map(params) do
-    opts
-    |> get_and_update_in([:options], &update_params(&1, params))
-    |> elem(1)
-  end
-
-  defp merge_params(_, opts), do: opts
-
-  defp update_params([_ | _] = options, params) do
-    {options, Keyword.put(options, :params, params)}
-  end
-
-  defp update_params(opts, params) do
-    {opts, [params: params]}
+    params = Keyword.merge(option_params, additional_params)
+    if Enum.empty?(params), do: options, else: options |> Keyword.put(:params, params)
   end
 
   defp maybe_parse_json({:ok, %HTTPoison.Response{headers: headers} = resp}, true) do
@@ -69,7 +55,7 @@ defmodule CryptoApis do
   def get(url, opts \\ []) when is_binary(url) do
     {parse_json?, opts} = Keyword.pop(opts, :parse_json?, true)
     {success_status?, opts} = Keyword.pop(opts, :success_status?, &(&1 in 200..299))
-    {options, headers} = get_opts(opts)
+    {options, headers} = parse_opts(opts)
 
     url
     |> HTTPoison.get(headers, options)
@@ -83,8 +69,8 @@ defmodule CryptoApis do
     end
   end
 
-  defp get_opts(opts) do
-    options = opts |> get_params |> Keyword.get(:options, [])
+  defp parse_opts(opts) do
+    options = Keyword.get(opts, :options, []) |> merge_params(opts)
     headers = Keyword.get(opts, :headers, [])
     {options, headers}
   end

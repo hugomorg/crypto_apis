@@ -40,7 +40,7 @@ defmodule CryptoApis.SatangTest do
         assert {:ok, response} = Satang.ticker()
         assert response.status_code == 200
         assert response.request_url == "https://satangcorp.com/api/v3/ticker/24hr"
-        assert response.request.options == [params: []]
+        assert response.request.options == []
       end
     end
 
