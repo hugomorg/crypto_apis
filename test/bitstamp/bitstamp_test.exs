@@ -99,17 +99,4 @@ defmodule CryptoApis.BitstampTest do
       end
     end
   end
-
-  describe "eur_usd_rate" do
-    test "eur_usd_rate/0 responds ok" do
-      with_mock HTTPoison,
-        get: fn url, _headers, options ->
-          {:ok, successful_response(url: url, options: options)}
-        end do
-        assert {:ok, response} = Bitstamp.eur_usd_rate()
-        assert response.status_code == 200
-        assert response.request_url == "https://www.bitstamp.net/api/v2/eur_usd/"
-      end
-    end
-  end
 end
