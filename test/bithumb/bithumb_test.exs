@@ -4,6 +4,32 @@ defmodule CryptoApis.BithumbTest do
   alias CryptoApis.Bithumb
   import CryptoApis.Fixtures
 
+  describe "asset_status" do
+    test "asset_status/1 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, _options ->
+          {:ok, successful_response(url: url)}
+        end do
+        assert {:ok, response} = Bithumb.asset_status(:BTC)
+        assert response.status_code == 200
+        assert response.request_url == "https://api.bithumb.com/public/assetsstatus/BTC"
+      end
+    end
+  end
+
+  describe "btci" do
+    test "btci/0 responds ok" do
+      with_mock HTTPoison,
+        get: fn url, _headers, _options ->
+          {:ok, successful_response(url: url)}
+        end do
+        assert {:ok, response} = Bithumb.btci()
+        assert response.status_code == 200
+        assert response.request_url == "https://api.bithumb.com/public/btci"
+      end
+    end
+  end
+
   describe "order_book" do
     test "order_book/1 responds ok" do
       with_mock HTTPoison,
@@ -31,7 +57,7 @@ defmodule CryptoApis.BithumbTest do
   end
 
   describe "trades" do
-    test "trades/3 responds ok" do
+    test "trades/1 responds ok" do
       with_mock HTTPoison,
         get: fn url, _headers, _options ->
           {:ok, successful_response(url: url)}

@@ -1,35 +1,41 @@
 defmodule CryptoApis.Bithumb do
   @moduledoc """
-  An API wrapper for the Bithumb exchange.
-
-  Docs: https://apidocs.bithumb.com
-
-  Currently only supports public endpoints.
-
+  https://apidocs.bithumb.com
   """
   @root_url "https://api.bithumb.com/public"
 
-  defp get_pair({_, _} = pair), do: pair
-  defp get_pair(pair), do: CryptoApis.Utils.split_pair(pair)
+  alias CryptoApis.Pair
+
+  defp process_pair(pair) do
+    pair |> Pair.new() |> Pair.join(delimiter: "_")
+  end
 
   defp get(type, pair, opts) do
-    {crypto, fiat} = get_pair(pair)
+    pair = process_pair(pair)
 
     type
-    |> url(crypto, fiat)
+    |> url(pair)
     |> CryptoApis.get(opts)
   end
 
-  defp url(:orders, crypto, fiat) do
-    @root_url <> "/orderbook" <> "/#{crypto}_#{fiat}"
+  defp url(:orders, pair) do
+    @root_url <> "/orderbook" <> "/#{pair}"
   end
 
-  defp url(:ticker, crypto, fiat) do
-    @root_url <> "/ticker" <> "/#{crypto}_#{fiat}"
+  defp url(:ticker, pair) do
+    @root_url <> "/ticker" <> "/#{pair}"
   end
 
-  defp url(:trades, crypto, fiat) do
-    @root_url <> "/transaction_history" <> "/#{crypto}_#{fiat}"
+  defp url(:trades, pair) do
+    @root_url <> "/transaction_history" <> "/#{pair}"
+  end
+
+  defp url(:asset_status, crypto) do
+    @root_url <> "/assetsstatus" <> "/#{crypto}"
+  end
+
+  defp url(:btci) do
+    @root_url <> "/btci"
   end
 
   @doc """
@@ -51,5 +57,19 @@ defmodule CryptoApis.Bithumb do
   """
   def trades(pair, opts \\ []) do
     get(:trades, pair, opts)
+  end
+
+  @doc """
+  https://apidocs.bithumb.com/docs/assets_status
+  """
+  def asset_status(crypto, opts \\ []) do
+    :asset_status |> url(crypto) |> CryptoApis.get(opts)
+  end
+
+  @doc """
+  https://apidocs.bithumb.com/docs/btci
+  """
+  def btci(opts \\ []) do
+    :btci |> url() |> CryptoApis.get(opts)
   end
 end
