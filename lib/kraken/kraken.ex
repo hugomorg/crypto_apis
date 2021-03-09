@@ -1,17 +1,12 @@
 defmodule CryptoApis.Kraken do
   @moduledoc """
-  An API wrapper for the Kraken exchange.
-
-  Docs: https://www.kraken.com/features/api
-
-  Currently only supports public endpoints.
-
+  https://www.kraken.com/features/api
   """
 
   @root_url "https://api.kraken.com"
   @api_version 0
 
-  alias CryptoApis
+  alias CryptoApis.Pair
 
   defp get(type, opts) do
     type
@@ -59,6 +54,10 @@ defmodule CryptoApis.Kraken do
     "#{root}/#{api_version}/public/#{resource}"
   end
 
+  defp process_pair(pair) do
+    pair |> Pair.new() |> to_string()
+  end
+
   @doc """
   https://www.kraken.com/features/api#get-server-time
   """
@@ -90,8 +89,8 @@ defmodule CryptoApis.Kraken do
   @doc """
   https://www.kraken.com/features/api#get-ticker-info
   """
-  def ticker(pair_name, opts \\ []) when is_atom(pair_name) or is_binary(pair_name) do
-    opts = Keyword.put(opts, :params, pair_name: pair_name)
+  def ticker(pair, opts \\ []) do
+    opts = Keyword.put(opts, :params, pair_name: process_pair(pair))
 
     get(:ticker, opts)
   end
@@ -99,8 +98,8 @@ defmodule CryptoApis.Kraken do
   @doc """
   https://www.kraken.com/features/api#get-ohlc-data
   """
-  def ohlc(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
-    opts = Keyword.put(opts, :params, pair: pair)
+  def ohlc(pair, opts \\ []) do
+    opts = Keyword.put(opts, :params, pair: process_pair(pair))
 
     get(:ohlc, opts)
   end
@@ -108,8 +107,8 @@ defmodule CryptoApis.Kraken do
   @doc """
   https://www.kraken.com/features/api#get-order-book
   """
-  def order_book(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
-    opts = Keyword.put(opts, :params, pair: pair)
+  def order_book(pair, opts \\ []) do
+    opts = Keyword.put(opts, :params, pair: process_pair(pair))
 
     get(:order_book, opts)
   end
@@ -117,8 +116,8 @@ defmodule CryptoApis.Kraken do
   @doc """
   https://www.kraken.com/features/api#get-recent-trades
   """
-  def trades(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
-    opts = Keyword.put(opts, :params, pair: pair)
+  def trades(pair, opts \\ []) do
+    opts = Keyword.put(opts, :params, pair: process_pair(pair))
 
     get(:trades, opts)
   end
@@ -126,8 +125,8 @@ defmodule CryptoApis.Kraken do
   @doc """
   https://www.kraken.com/features/api#get-recent-spread-data
   """
-  def spread(pair, opts \\ []) when is_atom(pair) or is_binary(pair) do
-    opts = Keyword.put(opts, :params, pair: pair)
+  def spread(pair, opts \\ []) do
+    opts = Keyword.put(opts, :params, pair: process_pair(pair))
 
     get(:spread, opts)
   end

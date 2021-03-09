@@ -8,7 +8,7 @@ defmodule CryptoApis.Zaif do
   alias CryptoApis.Pair
 
   defp url(:currency_info, pair) do
-    "#{@root_url}/currencies/#{pair}" |> String.downcase()
+    "#{@root_url}/currencies/#{pair}"
   end
 
   defp url(:pair_info, pair) do
@@ -37,7 +37,7 @@ defmodule CryptoApis.Zaif do
   https://zaif-api-document.readthedocs.io/ja/latest/PublicAPI.html#id7
   """
   def currency_info(crypto, opts \\ []) do
-    url(:currency_info, crypto) |> CryptoApis.get(opts)
+    :currency_info |> url(String.downcase("#{crypto}")) |> CryptoApis.get(opts)
   end
 
   @doc """

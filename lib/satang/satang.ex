@@ -3,22 +3,26 @@ defmodule CryptoApis.Satang do
   https://docs.satangcorp.com
   """
   @root_url "https://satangcorp.com/api/v3"
-  alias CryptoApis.Utils
+  alias CryptoApis.Pair
 
-  def url(:exchange_info) do
+  defp url(:exchange_info) do
     @root_url <> "/exchangeInfo"
   end
 
-  def url(:order_book) do
+  defp url(:order_book) do
     @root_url <> "/depth"
   end
 
-  def url(:aggregate_trades) do
+  defp url(:aggregate_trades) do
     @root_url <> "/aggTrades"
   end
 
-  def url(:ticker) do
+  defp url(:ticker) do
     @root_url <> "/ticker/24hr"
+  end
+
+  defp process_pair(pair) do
+    pair |> Pair.new() |> Pair.join(downcase?: true, delimiter: "_")
   end
 
   @doc """
@@ -32,7 +36,7 @@ defmodule CryptoApis.Satang do
   https://docs.satangcorp.com/apis-v3/public/depth
   """
   def order_book(pair, params \\ [], opts \\ []) do
-    pair = pair |> Utils.pair_to_string("_") |> String.downcase()
+    pair = process_pair(pair)
     opts = Keyword.merge(opts, params: params ++ [symbol: pair])
     :order_book |> url() |> CryptoApis.get(opts)
   end
@@ -41,7 +45,7 @@ defmodule CryptoApis.Satang do
   https://docs.satangcorp.com/apis-v3/public/aggregate-trade
   """
   def aggregate_trades(pair, params \\ [], opts \\ []) do
-    pair = pair |> Utils.pair_to_string("_") |> String.downcase()
+    pair = process_pair(pair)
     opts = Keyword.merge(opts, params: params ++ [symbol: pair])
     :aggregate_trades |> url() |> CryptoApis.get(opts)
   end
@@ -57,7 +61,7 @@ defmodule CryptoApis.Satang do
   end
 
   def ticker(pair, params, opts) do
-    pair = pair |> Utils.pair_to_string("_") |> String.downcase()
+    pair = process_pair(pair)
     opts = Keyword.merge(opts, params: params ++ [symbol: pair])
     :ticker |> url() |> CryptoApis.get(opts)
   end

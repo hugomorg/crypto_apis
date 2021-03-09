@@ -144,6 +144,29 @@ Pair can be any one of the following formats (using "BTCUSD" as an example):
 - `currencies(opts \\ [])`
 - `markets(opts \\ [])`
 
+### Satang (public only)
+
+- `exchange_info(opts \\ [])`
+- `order_book(pair, params \\ [], opts \\ [])`
+- `aggregate_trades(pair, params \\ [], opts \\ [])`
+- `ticker(pair \\ nil, params \\ [], opts \\ [])`
+
+### Upbit (public only)
+
+- `order_book(pair, opts \\ [])`
+- `markets(opts \\ [])`
+- `ticker(pair, opts \\ [])`
+- `trades(pair, params \\ [], opts \\ [])`
+
+### Zaif (public only)
+
+- `currency_info(crypto, opts \\ [])`
+- `pair_info(pair, opts \\ [])`
+- `last_price(pair, opts \\ [])`
+- `ticker(pair, opts \\ [])`
+- `trades(pair, opts \\ [])`
+- `order_book(pair, opts \\ [])`
+
 ## Examples
 
 Under the hood, requests are made with [HTTPoison](https://github.com/edgurgel/httpoison). All requests accept an optional list of `options`, which expects 3 keys, all optional. `headers` and `options` are passed straight through to `HTTPoison`. `params` is merged into `options`.

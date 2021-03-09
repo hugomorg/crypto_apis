@@ -65,7 +65,7 @@ defmodule CryptoApis.KrakenTest do
         assert {:ok, response} = Kraken.ticker(:BTCUSD)
         assert response.status_code == 200
         assert response.request_url == "https://api.kraken.com/0/public/Ticker"
-        assert response.request.options == [params: [pair_name: :BTCUSD]]
+        assert response.request.options == [params: [pair_name: "BTCUSD"]]
       end
     end
   end
@@ -79,7 +79,7 @@ defmodule CryptoApis.KrakenTest do
         assert {:ok, response} = Kraken.ohlc(:BTCUSD)
         assert response.status_code == 200
         assert response.request_url == "https://api.kraken.com/0/public/OHLC"
-        assert response.request.options == [params: [pair: :BTCUSD]]
+        assert response.request.options == [params: [pair: "BTCUSD"]]
       end
     end
   end
@@ -93,7 +93,7 @@ defmodule CryptoApis.KrakenTest do
         assert {:ok, response} = Kraken.order_book(:BTCUSD)
         assert response.status_code == 200
         assert response.request_url == "https://api.kraken.com/0/public/Depth"
-        assert response.request.options == [params: [pair: :BTCUSD]]
+        assert response.request.options == [params: [pair: "BTCUSD"]]
       end
     end
   end
@@ -107,7 +107,7 @@ defmodule CryptoApis.KrakenTest do
         assert {:ok, response} = Kraken.trades(:BTCUSD)
         assert response.status_code == 200
         assert response.request_url == "https://api.kraken.com/0/public/Trades"
-        assert response.request.options == [params: [pair: :BTCUSD]]
+        assert response.request.options == [params: [pair: "BTCUSD"]]
       end
     end
   end
@@ -121,7 +121,7 @@ defmodule CryptoApis.KrakenTest do
         assert {:ok, response} = Kraken.spread(:BTCUSD)
         assert response.status_code == 200
         assert response.request_url == "https://api.kraken.com/0/public/Spread"
-        assert response.request.options == [params: [pair: :BTCUSD]]
+        assert response.request.options == [params: [pair: "BTCUSD"]]
       end
     end
   end

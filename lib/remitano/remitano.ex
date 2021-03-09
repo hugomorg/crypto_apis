@@ -5,10 +5,10 @@ defmodule CryptoApis.Remitano do
 
   @root_url "https://api.remitano.com/api/v1"
 
-  alias CryptoApis.Utils
+  alias CryptoApis.Pair
 
   defp get(resource, pair, params, opts) do
-    pair = Utils.pair_to_string(pair)
+    pair = Pair.new(pair) |> to_string()
 
     resource
     |> url(pair)
