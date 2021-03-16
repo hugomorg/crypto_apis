@@ -89,10 +89,17 @@ defmodule CryptoApis.Kraken do
   @doc """
   https://www.kraken.com/features/api#get-ticker-info
   """
-  def ticker(pair, opts \\ []) do
-    opts = Keyword.put(opts, :params, pair_name: process_pair(pair))
+  def ticker(pairs, opts \\ [])
+
+  def ticker(pairs, opts) when is_list(pairs) do
+    pairs = pairs |> Enum.map(&to_string/1) |> Enum.join(",")
+    opts = Keyword.put(opts, :params, pair: pairs)
 
     get(:ticker, opts)
+  end
+
+  def ticker(pairs, opts) do
+    ticker(List.wrap(pairs), opts)
   end
 
   @doc """

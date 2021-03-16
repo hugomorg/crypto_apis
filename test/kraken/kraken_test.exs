@@ -65,7 +65,7 @@ defmodule CryptoApis.KrakenTest do
         assert {:ok, response} = Kraken.ticker(:BTCUSD)
         assert response.status_code == 200
         assert response.request_url == "https://api.kraken.com/0/public/Ticker"
-        assert response.request.options == [params: [pair_name: "BTCUSD"]]
+        assert response.request.options == [params: [pair: "BTCUSD"]]
       end
     end
   end
