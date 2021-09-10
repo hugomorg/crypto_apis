@@ -12,6 +12,7 @@ alias CryptoApis.{
   Cryptomkt,
   IndependentReserve,
   Indodax,
+  LocalBitcoins,
   Utils,
   Nairaex,
   Remitano,
