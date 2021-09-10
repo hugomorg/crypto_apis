@@ -1,6 +1,7 @@
 alias CryptoApis.{
   Bitflyer,
   BitcoinVN,
+  Blinktrade,
   Kraken,
   Bithumb,
   Bitkub,
