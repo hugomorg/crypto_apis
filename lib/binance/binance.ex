@@ -21,7 +21,6 @@ defmodule CryptoApis.Binance do
       |> Keyword.put_new(:tradeType, "BUY")
       |> Keyword.merge(asset: crypto, fiat: fiat)
       |> Enum.into(%{})
-      |> IO.inspect()
       |> Jason.encode!()
 
     CryptoApis.post(@root_url, data, opts)
