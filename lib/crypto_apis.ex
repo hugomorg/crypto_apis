@@ -63,6 +63,17 @@ defmodule CryptoApis do
     |> validate_status(success_status?)
   end
 
+  def post(url, data, opts \\ []) when is_binary(url) do
+    {parse_json?, opts} = Keyword.pop(opts, :parse_json?, true)
+    {success_status?, opts} = Keyword.pop(opts, :success_status?, &(&1 in 200..299))
+    {options, headers} = parse_opts(opts)
+
+    url
+    |> HTTPoison.post(data, headers, options)
+    |> maybe_parse_json(parse_json?)
+    |> validate_status(success_status?)
+  end
+
   def data(url, opts \\ []) do
     with {:ok, %HTTPoison.Response{body: body}} <- get(url, opts) do
       {:ok, body}
