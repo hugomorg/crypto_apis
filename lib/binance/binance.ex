@@ -44,4 +44,9 @@ defmodule CryptoApis.Binance.Futures do
     (@base_url <> "/fundingRate")
     |> CryptoApis.get(params: opts)
   end
+
+  def get_exchange_info do
+    (@base_url <> "/exchangeInfo")
+    |> CryptoApis.get()
+  end
 end
