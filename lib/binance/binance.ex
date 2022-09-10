@@ -26,3 +26,22 @@ defmodule CryptoApis.Binance do
     CryptoApis.post(@root_url, data, opts)
   end
 end
+
+defmodule CryptoApis.Binance.Futures do
+  @base_url "https://www.binance.com/fapi/v1"
+
+  def get_futures do
+    (@base_url <> "/premiumIndex")
+    |> CryptoApis.get()
+  end
+
+  def get_future(symbol) do
+    (@base_url <> "/premiumIndex")
+    |> CryptoApis.get(params: [symbol: symbol])
+  end
+
+  def get_funding_rate(opts \\ []) do
+    (@base_url <> "/fundingRate")
+    |> CryptoApis.get(params: opts)
+  end
+end
