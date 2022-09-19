@@ -22,9 +22,9 @@ defmodule CryptoApis.FTX do
       |> CryptoApis.get(params: [future: future])
     end
 
-    def get_funding_rates do
+    def get_funding_rates(params \\ []) do
       "#{FTX.base_url()}/funding_rates"
-      |> CryptoApis.get()
+      |> CryptoApis.get(params: params)
     end
   end
 end
