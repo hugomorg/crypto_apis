@@ -85,4 +85,10 @@ defmodule CryptoApis do
     headers = Keyword.get(opts, :headers, [])
     {options, headers}
   end
+
+  def hmac(key, data) do
+    :hmac
+    |> :crypto.mac(:sha256, key, data)
+    |> Base.encode16(case: :lower)
+  end
 end

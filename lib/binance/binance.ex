@@ -28,7 +28,17 @@ defmodule CryptoApis.Binance do
 end
 
 defmodule CryptoApis.Binance.Futures do
-  @base_url "https://www.binance.com/fapi/v1"
+  @base_url "https://fapi.binance.com/fapi/"
+  def base_url, do: @base_url
+
+  defdelegate get_futures, to: __MODULE__.V1
+  defdelegate get_future(symbol), to: __MODULE__.V1
+  defdelegate get_exchange_info, to: __MODULE__.V1
+  defdelegate get_funding_rate(opts \\ []), to: __MODULE__.V1
+end
+
+defmodule CryptoApis.Binance.Futures.V1 do
+  @base_url CryptoApis.Binance.Futures.base_url() <> "v1"
 
   def get_futures do
     (@base_url <> "/premiumIndex")
@@ -48,5 +58,24 @@ defmodule CryptoApis.Binance.Futures do
   def get_exchange_info do
     (@base_url <> "/exchangeInfo")
     |> CryptoApis.get()
+  end
+end
+
+defmodule CryptoApis.Binance.Futures.V2 do
+  @base_url CryptoApis.Binance.Futures.base_url() <> "v2"
+
+  def get_current_positions(api_key, api_secret, params \\ []) do
+    params =
+      Keyword.put_new_lazy(params, :timestamp, fn ->
+        DateTime.utc_now() |> DateTime.to_unix(:millisecond)
+      end)
+
+    query_params = URI.encode_query(params)
+
+    signature = CryptoApis.hmac(api_secret, query_params)
+    params = params ++ [signature: signature]
+
+    (@base_url <> "/positionRisk")
+    |> CryptoApis.get(headers: [{"X-MBX-APIKEY", api_key}], params: params)
   end
 end
