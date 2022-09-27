@@ -1,6 +1,30 @@
 # Crypto APIs
 
-This project is meant to offer the user a helpful wrapper around various cryptocurrency exchange APIs, so you don't have to worry about the low-level details.
+This project is meant to offer the user a helpful wrapper around various cryptocurrency APIs, so you don't have to worry about the low-level details. The initial focus is on centralised exchange APIs.
+
+The following exchanges are covered:
+
+- Binance
+- BitcoinVN
+- Bitflyer
+- Bithumb
+- Bitkub
+- Bitstamp
+- Blinktrade
+- Coinbase
+- Coinfloor
+- CoinsPH
+- CryptoMkt
+- FTX
+- IndependentReserve
+- Indodax
+- Kraken
+- LocalBitcoins
+- NairaEx
+- Remitano
+- Satang
+- Upbit
+- Zaif
 
 Pair can be any one of the following formats (using "BTCUSD" as an example):
 

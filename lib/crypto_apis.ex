@@ -58,7 +58,7 @@ defmodule CryptoApis do
     {options, headers} = parse_opts(opts)
 
     url
-    |> HTTPoison.get(headers, options)
+    |> CryptoApis.HTTPClient.impl().get(headers, options)
     |> maybe_parse_json(parse_json?)
     |> validate_status(success_status?)
   end
@@ -69,7 +69,7 @@ defmodule CryptoApis do
     {options, headers} = parse_opts(opts)
 
     url
-    |> HTTPoison.post(data, headers, options)
+    |> CryptoApis.HTTPClient.impl().post(data, headers, options)
     |> maybe_parse_json(parse_json?)
     |> validate_status(success_status?)
   end
