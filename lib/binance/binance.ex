@@ -35,6 +35,8 @@ defmodule CryptoApis.Binance.Futures do
   defdelegate get_future(symbol), to: __MODULE__.V1
   defdelegate get_exchange_info, to: __MODULE__.V1
   defdelegate get_funding_rate(opts \\ []), to: __MODULE__.V1
+  defdelegate mark_price, to: __MODULE__.V1
+  defdelegate mark_price(symbol), to: __MODULE__.V1
 end
 
 defmodule CryptoApis.Binance.Futures.V1 do
@@ -58,6 +60,16 @@ defmodule CryptoApis.Binance.Futures.V1 do
   def get_exchange_info do
     (@base_url <> "/exchangeInfo")
     |> CryptoApis.get()
+  end
+
+  def mark_price do
+    (@base_url <> "/premiumIndex")
+    |> CryptoApis.get()
+  end
+
+  def mark_price(symbol) do
+    (@base_url <> "/premiumIndex")
+    |> CryptoApis.get(params: [symbol: symbol])
   end
 end
 
