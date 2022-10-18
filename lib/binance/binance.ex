@@ -25,6 +25,18 @@ defmodule CryptoApis.Binance do
 
     CryptoApis.post(@root_url, data, opts)
   end
+
+  def build_signature(api_secret, params) do
+    params =
+      Keyword.put_new_lazy(params, :timestamp, fn ->
+        DateTime.utc_now() |> DateTime.to_unix(:millisecond)
+      end)
+
+    query_params = URI.encode_query(params)
+
+    signature = CryptoApis.hmac(api_secret, query_params)
+    params ++ [signature: signature]
+  end
 end
 
 defmodule CryptoApis.Binance.Futures do
@@ -37,10 +49,12 @@ defmodule CryptoApis.Binance.Futures do
   defdelegate get_funding_rate(opts \\ []), to: __MODULE__.V1
   defdelegate mark_price, to: __MODULE__.V1
   defdelegate mark_price(symbol), to: __MODULE__.V1
+  defdelegate get_income_history(api_key, api_secret, params \\ []), to: __MODULE__.V1
 end
 
 defmodule CryptoApis.Binance.Futures.V1 do
   @base_url CryptoApis.Binance.Futures.base_url() <> "v1"
+  alias CryptoApis.Binance
 
   def get_futures do
     (@base_url <> "/premiumIndex")
@@ -71,23 +85,25 @@ defmodule CryptoApis.Binance.Futures.V1 do
     (@base_url <> "/premiumIndex")
     |> CryptoApis.get(params: [symbol: symbol])
   end
+
+  def get_income_history(api_key, api_secret, params \\ []) do
+    (@base_url <> "/income")
+    |> CryptoApis.get(
+      headers: [{"X-MBX-APIKEY", api_key}],
+      params: Binance.build_signature(api_secret, params)
+    )
+  end
 end
 
 defmodule CryptoApis.Binance.Futures.V2 do
   @base_url CryptoApis.Binance.Futures.base_url() <> "v2"
+  alias CryptoApis.Binance
 
   def get_current_positions(api_key, api_secret, params \\ []) do
-    params =
-      Keyword.put_new_lazy(params, :timestamp, fn ->
-        DateTime.utc_now() |> DateTime.to_unix(:millisecond)
-      end)
-
-    query_params = URI.encode_query(params)
-
-    signature = CryptoApis.hmac(api_secret, query_params)
-    params = params ++ [signature: signature]
-
     (@base_url <> "/positionRisk")
-    |> CryptoApis.get(headers: [{"X-MBX-APIKEY", api_key}], params: params)
+    |> CryptoApis.get(
+      headers: [{"X-MBX-APIKEY", api_key}],
+      params: Binance.build_signature(api_secret, params)
+    )
   end
 end

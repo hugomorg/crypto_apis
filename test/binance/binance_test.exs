@@ -62,6 +62,36 @@ defmodule CryptoApis.BinanceTest do
       assert {:ok, _response} = Binance.Futures.get_exchange_info()
       assert {:ok, _response} = Binance.Futures.V1.get_exchange_info()
     end
+
+    test "get_income_history/2 - no timestamp" do
+      expect(CryptoApis.HTTPClient.Mock, :get, fn "https://fapi.binance.com/fapi/v1/income",
+                                                  [{"X-MBX-APIKEY", "key"}],
+                                                  [params: params] ->
+        assert CryptoApis.hmac("secret", "timestamp=#{params[:timestamp]}") == params[:signature]
+
+        {:ok, %HTTPoison.Response{status_code: 200}}
+      end)
+
+      assert {:ok, _response} = Binance.Futures.get_income_history("key", "secret")
+    end
+
+    test "get_income_history/3 - timestamp" do
+      timestamp = 1_664_271_430_093
+
+      expect(CryptoApis.HTTPClient.Mock, :get, fn "https://fapi.binance.com/fapi/v1/income",
+                                                  [{"X-MBX-APIKEY", "key"}],
+                                                  [params: params] ->
+        assert CryptoApis.hmac("secret", "a=b&timestamp=#{timestamp}") == params[:signature]
+
+        {:ok, %HTTPoison.Response{status_code: 200}}
+      end)
+
+      assert {:ok, _response} =
+               Binance.Futures.get_income_history("key", "secret",
+                 a: :b,
+                 timestamp: timestamp
+               )
+    end
   end
 
   describe "futures v2" do
