@@ -76,5 +76,37 @@ defmodule CryptoApis.FTXTest do
 
       assert {:ok, _} = FTX.Futures.get_current_positions("key", "secret")
     end
+
+    test "get_funding_payments/3" do
+      expect(HTTPClient.Mock, :get, fn url, headers, opts ->
+        assert url == "https://ftx.com/api/funding_payments"
+
+        assert headers == [
+                 {"FTX-KEY", "key"},
+                 {"FTX-TS", 1_666_354_178_859},
+                 {"FTX-SIGN", "2a06d0fc1de5228976c6f72e7ee38f553f3e1d410c98c12022cf0c29081dc80b"}
+               ]
+
+        assert opts[:params][:timestamp] == 1_666_354_178_859
+        {:ok, %HTTPoison.Response{status_code: 200}}
+      end)
+
+      timestamp = 1_666_354_178_859
+
+      assert {:ok, _} = FTX.Futures.get_funding_payments("key", "secret", timestamp: timestamp)
+    end
+
+    test "get_funding_payments/2 - timestamp added automatically" do
+      expect(HTTPClient.Mock, :get, fn url, headers, [] ->
+        assert url == "https://ftx.com/api/funding_payments"
+        assert [{"FTX-KEY", "key"}, {"FTX-TS", timestamp}, {"FTX-SIGN", signature}] = headers
+        assert is_integer(timestamp)
+        assert is_binary(signature)
+
+        {:ok, %HTTPoison.Response{status_code: 200}}
+      end)
+
+      assert {:ok, _} = FTX.Futures.get_funding_payments("key", "secret")
+    end
   end
 end

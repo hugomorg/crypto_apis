@@ -28,26 +28,36 @@ defmodule CryptoApis.FTX do
     end
 
     def get_current_positions(api_key, api_secret, params \\ []) do
+      url = "#{FTX.base_url()}/positions"
+      headers = build_signature(api_key, api_secret, url, params)
+
+      CryptoApis.get(url, params: params, headers: headers)
+    end
+
+    def get_funding_payments(api_key, api_secret, params \\ []) do
+      url = "#{FTX.base_url()}/funding_payments"
+      headers = build_signature(api_key, api_secret, url, params)
+
+      CryptoApis.get(url, params: params, headers: headers)
+    end
+
+    defp build_signature(api_key, api_secret, method \\ "GET", url, params) do
       timestamp =
         Keyword.get_lazy(params, :timestamp, fn ->
           DateTime.to_unix(DateTime.utc_now(), :millisecond)
         end)
 
-      method = "GET"
-      request_path = "/api/positions"
+      request_path = URI.parse(url).path
 
       signature_payload = "#{timestamp}#{method}#{request_path}"
 
       signature = CryptoApis.hmac(api_secret, signature_payload)
 
-      headers = [
+      [
         {"FTX-KEY", api_key},
         {"FTX-TS", timestamp},
         {"FTX-SIGN", signature}
       ]
-
-      "#{FTX.base_url()}/positions"
-      |> CryptoApis.get(params: params, headers: headers)
     end
   end
 end
