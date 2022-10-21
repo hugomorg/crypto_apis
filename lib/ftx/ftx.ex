@@ -28,7 +28,11 @@ defmodule CryptoApis.FTX do
     end
 
     def get_current_positions(api_key, api_secret, params \\ []) do
-      timestamp = DateTime.to_unix(DateTime.utc_now(), :millisecond)
+      timestamp =
+        Keyword.get_lazy(params, :timestamp, fn ->
+          DateTime.to_unix(DateTime.utc_now(), :millisecond)
+        end)
+
       method = "GET"
       request_path = "/api/positions"
 
