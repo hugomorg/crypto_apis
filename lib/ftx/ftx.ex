@@ -41,6 +41,13 @@ defmodule CryptoApis.FTX do
       CryptoApis.get(url, params: params, headers: headers)
     end
 
+    def get_all_historical_balances_and_positions(api_key, api_secret, params \\ []) do
+      url = "#{FTX.base_url()}/historical_balances/requests"
+      headers = build_signature(api_key, api_secret, url, params)
+
+      CryptoApis.get(url, params: params, headers: headers)
+    end
+
     defp build_signature(api_key, api_secret, method \\ "GET", url, params) do
       timestamp =
         Keyword.get_lazy(params, :timestamp, fn ->

@@ -108,5 +108,40 @@ defmodule CryptoApis.FTXTest do
 
       assert {:ok, _} = FTX.Futures.get_funding_payments("key", "secret")
     end
+
+    test "get_all_historical_balances_and_positions/3" do
+      expect(HTTPClient.Mock, :get, fn url, headers, opts ->
+        assert url == "https://ftx.com/api/historical_balances/requests"
+
+        assert headers == [
+                 {"FTX-KEY", "key"},
+                 {"FTX-TS", 1_666_354_178_859},
+                 {"FTX-SIGN", "077c875285dd0b92066744e8baf844e00fde1a8750adea31a863556511910a60"}
+               ]
+
+        assert opts[:params][:timestamp] == 1_666_354_178_859
+        {:ok, %HTTPoison.Response{status_code: 200}}
+      end)
+
+      timestamp = 1_666_354_178_859
+
+      assert {:ok, _} =
+               FTX.Futures.get_all_historical_balances_and_positions("key", "secret",
+                 timestamp: timestamp
+               )
+    end
+
+    test "get_all_historical_balances_and_positions/2 - timestamp added automatically" do
+      expect(HTTPClient.Mock, :get, fn url, headers, [] ->
+        assert url == "https://ftx.com/api/historical_balances/requests"
+        assert [{"FTX-KEY", "key"}, {"FTX-TS", timestamp}, {"FTX-SIGN", signature}] = headers
+        assert is_integer(timestamp)
+        assert is_binary(signature)
+
+        {:ok, %HTTPoison.Response{status_code: 200}}
+      end)
+
+      assert {:ok, _} = FTX.Futures.get_all_historical_balances_and_positions("key", "secret")
+    end
   end
 end
