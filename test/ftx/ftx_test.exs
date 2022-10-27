@@ -52,7 +52,7 @@ defmodule CryptoApis.FTXTest do
         assert headers == [
                  {"FTX-KEY", "key"},
                  {"FTX-TS", 1_666_354_178_859},
-                 {"FTX-SIGN", "00b5c7267b80e39d89ba947ed49cf030ffd171a883610df32c8a2ad10eee6ffb"}
+                 {"FTX-SIGN", "5bcf789902b34d15f22b85921f0a304544b8a72b6c8a6d55a0a8dae93e6e3b77"}
                ]
 
         assert opts[:params][:timestamp] == 1_666_354_178_859
@@ -84,7 +84,7 @@ defmodule CryptoApis.FTXTest do
         assert headers == [
                  {"FTX-KEY", "key"},
                  {"FTX-TS", 1_666_354_178_859},
-                 {"FTX-SIGN", "2a06d0fc1de5228976c6f72e7ee38f553f3e1d410c98c12022cf0c29081dc80b"}
+                 {"FTX-SIGN", "7ffa417a9dae53f99278f0d66429710a1ff37a4c23c22809ebd4c4e6889988e5"}
                ]
 
         assert opts[:params][:timestamp] == 1_666_354_178_859
@@ -116,7 +116,7 @@ defmodule CryptoApis.FTXTest do
         assert headers == [
                  {"FTX-KEY", "key"},
                  {"FTX-TS", 1_666_354_178_859},
-                 {"FTX-SIGN", "077c875285dd0b92066744e8baf844e00fde1a8750adea31a863556511910a60"}
+                 {"FTX-SIGN", "b93f0384f0bede072c2d78a4f9008bfb33ac4974ff05ac1c04e55d94d0c458b5"}
                ]
 
         assert opts[:params][:timestamp] == 1_666_354_178_859

@@ -56,7 +56,15 @@ defmodule CryptoApis.FTX do
 
       request_path = URI.parse(url).path
 
-      signature_payload = "#{timestamp}#{method}#{request_path}"
+      query =
+        params
+        |> URI.encode_query()
+        |> case do
+          "" -> ""
+          query -> "?" <> query
+        end
+
+      signature_payload = "#{timestamp}#{method}#{request_path}#{query}"
 
       signature = CryptoApis.hmac(api_secret, signature_payload)
 
