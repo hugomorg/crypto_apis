@@ -50,6 +50,16 @@ defmodule CryptoApis.Binance.Futures do
   defdelegate mark_price, to: __MODULE__.V1
   defdelegate mark_price(symbol), to: __MODULE__.V1
   defdelegate get_income_history(api_key, api_secret, params \\ []), to: __MODULE__.V1
+
+  defdelegate get_download_id_for_futures_transaction_history(api_key, api_secret, params \\ []),
+    to: __MODULE__.V1
+
+  defdelegate get_futures_transaction_history_download_link_by_id(
+                api_key,
+                api_secret,
+                params \\ []
+              ),
+              to: __MODULE__.V1
 end
 
 defmodule CryptoApis.Binance.Futures.V1 do
@@ -91,6 +101,22 @@ defmodule CryptoApis.Binance.Futures.V1 do
     |> CryptoApis.get(
       headers: [{"X-MBX-APIKEY", api_key}],
       params: Binance.build_signature(api_secret, params)
+    )
+  end
+
+  def get_download_id_for_futures_transaction_history(api_key, api_secret, params \\ []) do
+    (@base_url <> "/income/asyn")
+    |> CryptoApis.get(
+      headers: [{"X-MBX-APIKEY", api_key}],
+      params: Binance.build_signature(api_secret, params)
+    )
+  end
+
+  def get_futures_transaction_history_download_link_by_id(api_key, api_secret, id, params \\ []) do
+    (@base_url <> "/income/asyn/id")
+    |> CryptoApis.get(
+      headers: [{"X-MBX-APIKEY", api_key}],
+      params: Binance.build_signature(api_secret, Keyword.put_new(params, :downloadId, id))
     )
   end
 end
