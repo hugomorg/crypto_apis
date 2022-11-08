@@ -27,6 +27,11 @@ defmodule CryptoApis.FTX do
       |> CryptoApis.get(params: params)
     end
 
+    def get_future_stats(future, params \\ []) do
+      "#{FTX.base_url()}#{@base_path}/#{future}/stats"
+      |> CryptoApis.get(params: params)
+    end
+
     def get_current_positions(api_key, api_secret, params \\ []) do
       url = "#{FTX.base_url()}/positions"
       headers = build_signature(api_key, api_secret, url, params)
