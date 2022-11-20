@@ -6,6 +6,7 @@ alias CryptoApis.{
   Bitkub,
   Bitstamp,
   Blinktrade,
+  Bybit,
   Coinbase,
   Coinfloor,
   CoinsPH,
