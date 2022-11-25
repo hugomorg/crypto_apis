@@ -14,6 +14,7 @@ alias CryptoApis.{
   FTX,
   IndependentReserve,
   Indodax,
+  Kucoin,
   Kraken,
   LocalBitcoins,
   Nairaex,
