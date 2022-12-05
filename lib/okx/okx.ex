@@ -4,6 +4,11 @@ defmodule CryptoApis.OKX do
     |> CryptoApis.get()
   end
 
+  def get_funding_rate_history(symbol, params) do
+    "https://www.okx.com/api/v5/public/funding-rate-history?instId=#{symbol}"
+    |> CryptoApis.get(params: params)
+  end
+
   def get_underlying(type) do
     "https://www.okx.com/api/v5/public/underlying?instType=#{type}"
     |> CryptoApis.get()
