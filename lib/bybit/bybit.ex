@@ -53,4 +53,22 @@ defmodule CryptoApis.Bybit do
     "https://api.bybit.com/private/linear/funding/prev-funding?#{sorted_query_string}&sign=#{signature}"
     |> CryptoApis.get()
   end
+
+  def get_user_trade_records(api_key, api_secret, symbol, params \\ []) do
+    sorted_query_string =
+      [
+        {:api_key, api_key},
+        {:symbol, symbol}
+        | Keyword.put_new_lazy(params, :timestamp, fn ->
+            DateTime.to_unix(DateTime.utc_now(), :millisecond)
+          end)
+      ]
+      |> Enum.sort()
+      |> URI.encode_query()
+
+    signature = CryptoApis.hmac(api_secret, sorted_query_string)
+
+    "https://api.bybit.com/contract/v3/private/execution/list?#{sorted_query_string}&sign=#{signature}"
+    |> CryptoApis.get()
+  end
 end
