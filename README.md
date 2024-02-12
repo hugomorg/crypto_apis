@@ -1,5 +1,7 @@
 # Crypto APIs
 
+**This library is no longer being maintained. Please see [this](https://github.com/hugomorg/crypto_exchange_apis) repo for a more up to date and maintained library.**
+
 This project is meant to offer the user a helpful wrapper around various cryptocurrency APIs, so you don't have to worry about the low-level details. The initial focus is on centralised exchange APIs.
 
 The following exchanges are covered:
